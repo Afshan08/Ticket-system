@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Production Transaction</title>
+    <title>Laminating Transaction</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -24,7 +24,7 @@
             class="w-full max-w-7xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col overflow-hidden max-h-full">
             <!-- Header Bar -->
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h2 class="text-xl font-bold text-indigo-700">Printing Transaction</h2>
+                <h2 class="text-xl font-bold text-indigo-700">Laminating Transaction</h2>
                 <div class="flex space-x-3">
                     <a href="../index.html"
                         class="px-4 py-2 rounded text-gray-500 hover:text-gray-700 font-medium hover:bg-gray-100 transition-colors flex items-center">Cancel</a>
@@ -40,37 +40,25 @@
             <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
                 <form id="transaction-form" class="space-y-6">
 
-                    <!-- Top Controls Grid: Used 12-col grid for precise control -->
+                    <!-- Top Controls Grid: Adjusted columns since Type is removed -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-                        <!-- Trans No: 2 cols on desktop, 6 on tablet -->
-                        <div class="col-span-1 md:col-span-2">
+                        <!-- Trans No: 3 cols -->
+                        <div class="col-span-1 md:col-span-3">
                             <label class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Trans
                                 No.</label>
                             <input type="text" value="001" readonly
                                 class="block w-full h-10 px-3 border border-gray-300 rounded-md bg-gray-100 text-gray-600 font-mono shadow-sm">
                         </div>
-                        <!-- Type: 3 cols on desktop (wider), 6 on tablet -->
-                        <div class="col-span-1 md:col-span-3">
-                            <label
-                                class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Type</label>
-                            <select id="transactionType"
-                                class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm bg-white">
-                                <option value="">Select...</option>
-                                <option value="31">Print</option>
-                                <option value="32">Rewind</option>
-                                <option value="33">Laminate</option>
-                                <option value="34">Slit</option>
-                            </select>
-                        </div>
-                        <!-- Date: 3 cols on desktop -->
+
+                        <!-- Date: 3 cols -->
                         <div class="col-span-1 md:col-span-3">
                             <label
                                 class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Date</label>
                             <input type="date"
                                 class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                         </div>
-                        <!-- Job: 4 cols on desktop -->
-                        <div class="col-span-1 md:col-span-4">
+                        <!-- Job: 6 cols -->
+                        <div class="col-span-1 md:col-span-6">
                             <label class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Job
                                 No.</label>
                             <div class="flex shadow-sm rounded-md h-10">
@@ -129,84 +117,8 @@
 
                     <!-- Dynamic Sections -->
                     <div id="dynamic-fields-container" class="min-h-[200px]">
-
-                        <!-- Placeholder -->
-                        <div id="section-placeholder"
-                            class="text-center text-gray-400 py-12 bg-slate-50 rounded-xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center">
-                            <span class="text-4xl mb-2">👆</span>
-                            <span class="font-medium">Select a Transaction Type above</span>
-                        </div>
-
-                        <!-- Print (31) -->
-                        <div id="section-31" class="hidden dynamic-section animate-fade-in">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4 border-l-4 border-indigo-500 pl-3">Printing
-                                Output</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Before (kg)</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Printed (kg)</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-red-600 text-xs font-bold mb-1">Wastage</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-red-300 bg-red-50 text-red-900 rounded-md focus:ring-red-500 focus:border-red-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Actual Output</label>
-                                    <input type="number"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1 md:col-span-2">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Quality Check
-                                        Notes</label>
-                                    <input type="text"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
-                                        placeholder="Pass/Fail...">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Rewinding (32) -->
-                        <div id="section-32" class="hidden dynamic-section animate-fade-in">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4 border-l-4 border-amber-500 pl-3">Rewinding
-                                Output</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Input (kg)</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Rewound (kg)</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Rolls</label>
-                                    <input type="number"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-red-600 text-xs font-bold mb-1">Wastage</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-red-300 bg-red-50 text-red-900 rounded-md focus:ring-red-500 focus:border-red-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1 md:col-span-2">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Tension Notes</label>
-                                    <input type="text"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Lamination (33) -->
-                        <div id="section-33" class="hidden dynamic-section animate-fade-in">
+                        <!-- Lamination (33) Only -->
+                        <div id="section-33" class="dynamic-section animate-fade-in">
                             <h3 class="text-lg font-bold text-gray-800 mb-4 border-l-4 border-blue-500 pl-3">Lamination
                                 Output</h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -236,44 +148,6 @@
                                 <div class="col-span-1 md:col-span-1">
                                     <label class="block text-gray-600 text-xs font-bold mb-1">Adhesion</label>
                                     <input type="text"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Slitting (34) -->
-                        <div id="section-34" class="hidden dynamic-section animate-fade-in">
-                            <h3 class="text-lg font-bold text-gray-800 mb-4 border-l-4 border-emerald-500 pl-3">Slitting
-                                Output</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Input (kg)</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Width (mm)</label>
-                                    <input type="number" step="0.1"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-red-600 text-xs font-bold mb-1">Wastage</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-red-300 bg-red-50 text-red-900 rounded-md focus:ring-red-500 focus:border-red-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Output Pcs</label>
-                                    <input type="number"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Final Qty</label>
-                                    <input type="number"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Tolerance</label>
-                                    <input type="number" step="0.01"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                             </div>
@@ -312,23 +186,6 @@
 
     <script src="../js/mock_data.js"></script>
     <script src="../js/app.js"></script>
-    <script>
-        const typeSelect = document.getElementById('transactionType');
-        const sections = document.querySelectorAll('.dynamic-section');
-        const placeholder = document.getElementById('section-placeholder');
-
-        typeSelect.addEventListener('change', (e) => {
-            const selectedType = e.target.value;
-            sections.forEach(sec => sec.classList.add('hidden'));
-
-            if (selectedType) {
-                placeholder.classList.add('hidden');
-                document.getElementById(`section-${selectedType}`)?.classList.remove('hidden');
-            } else {
-                placeholder.classList.remove('hidden');
-            }
-        });
-    </script>
 </body>
 
 </html>
