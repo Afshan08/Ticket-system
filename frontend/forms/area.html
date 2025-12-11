@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Areas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+    <main id="main-content" class="p-8 transition-all duration-300 min-h-screen ml-0 md:ml-64">
+        <div class="md:hidden mb-4">
+            <button id="mobile-menu-btn" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Area Details</h2>
+
+            <form>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Area Name</label>
+                    <input type="text"
+                        class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300"
+                        placeholder="e.g. Press Room">
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+                    <textarea
+                        class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300"
+                        rows="3"></textarea>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <a href="../index.html" class="text-gray-500 hover:text-gray-700 font-medium">Cancel</a>
+                    <button
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors"
+                        type="button">
+                        Save Area
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="../js/mock_data.js"></script>
+    <script src="../js/app.js"></script>
+</body>
+
+</html>
