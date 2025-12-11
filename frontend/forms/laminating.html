@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laminating Transaction</title>
+    <title>LaminationTransaction</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -24,7 +24,7 @@
             class="w-full max-w-7xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 flex flex-col overflow-hidden max-h-full">
             <!-- Header Bar -->
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                <h2 class="text-xl font-bold text-indigo-700">Laminating Transaction</h2>
+                <h2 class="text-xl font-bold text-indigo-700">Lamination Transaction</h2>
                 <div class="flex space-x-3">
                     <a href="../index.html"
                         class="px-4 py-2 rounded text-gray-500 hover:text-gray-700 font-medium hover:bg-gray-100 transition-colors flex items-center">Cancel</a>
@@ -40,7 +40,7 @@
             <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
                 <form id="transaction-form" class="space-y-6">
 
-                    <!-- Top Controls Grid: Adjusted columns since Type is removed -->
+                    <!-- Top Controls Grid: Used 12-col grid for precise control -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                         <!-- Trans No: 3 cols -->
                         <div class="col-span-1 md:col-span-3">
@@ -116,19 +116,19 @@
                     </div>
 
                     <!-- Dynamic Sections -->
-                    <div id="dynamic-fields-container" class="min-h-[200px]">
-                        <!-- Lamination (33) Only -->
-                        <div id="section-33" class="dynamic-section animate-fade-in">
+                    <div id="dynamic-fields-container" class="min-h-[100px]">
+                        <!-- Lamination Section (Based on Printing Structure) -->
+                        <div id="section-lamination" class="dynamic-section animate-fade-in">
                             <h3 class="text-lg font-bold text-gray-800 mb-4 border-l-4 border-blue-500 pl-3">Lamination
                                 Output</h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                                 <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Plain (kg)</label>
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Before (kg)</label>
                                     <input type="number" step="0.01"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Laminated (kg)</label>
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Output (kg)</label>
                                     <input type="number" step="0.01"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
@@ -137,18 +137,17 @@
                                     <input type="number" step="0.01"
                                         class="block w-full h-10 px-3 border border-red-300 bg-red-50 text-red-900 rounded-md focus:ring-red-500 focus:border-red-500 shadow-sm">
                                 </div>
-                                <div class="col-span-1 md:col-span-2">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Film Type</label>
-                                    <select
+                                <div class="col-span-1">
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Actual Output</label>
+                                    <input type="number"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                        <option>Matte</option>
-                                        <option>Gloss</option>
-                                    </select>
                                 </div>
-                                <div class="col-span-1 md:col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Adhesion</label>
+                                <div class="col-span-1 md:col-span-2">
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Quality Check
+                                        Notes</label>
                                     <input type="text"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+                                        placeholder="Pass/Fail...">
                                 </div>
                             </div>
                         </div>

@@ -52,12 +52,11 @@ function injectSidebar() {
                 ${createNavLink('Operator', formPrefix + 'operator.html', 'M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z')}
 
                 <div class="px-4 mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-label">Transactions</div>
-                ${createNavLink('Printing Transaction', formPrefix + 'transaction.html', 'M12 4v16m8-8H4')}
                 ${createNavLink('Job Order', formPrefix + 'job.html', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2')}
-                ${createNavLink('Print', formPrefix + 'print.html', 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z')}
-                ${createNavLink('Rewinding', formPrefix + 'rewinding.html', 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15')}
-                ${createNavLink('Lamination', formPrefix + 'lamination.html', 'M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2')}
-                ${createNavLink('Slitting', formPrefix + 'slitting.html', 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z')}
+                ${createNavLink('Printing Transaction', formPrefix + 'transaction.html', 'M12 4v16m8-8H4')}
+                ${createNavLink('Rewind Transaction', formPrefix + 'rewinding.html', 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15')}
+                ${createNavLink('Lamination Transaction', formPrefix + 'laminating.html', 'M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2')}
+                ${createNavLink('Slit Transaction', formPrefix + 'sliting.html', 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z')}
             </nav>
         </div>
     `;

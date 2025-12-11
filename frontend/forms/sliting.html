@@ -40,7 +40,7 @@
             <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
                 <form id="transaction-form" class="space-y-6">
 
-                    <!-- Top Controls Grid: Adjusted columns since Type is removed -->
+                    <!-- Top Controls Grid: Used 12-col grid for precise control -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
                         <!-- Trans No: 3 cols -->
                         <div class="col-span-1 md:col-span-3">
@@ -116,20 +116,20 @@
                     </div>
 
                     <!-- Dynamic Sections -->
-                    <div id="dynamic-fields-container" class="min-h-[200px]">
-                        <!-- Slitting (34) Only -->
-                        <div id="section-34" class="dynamic-section animate-fade-in">
+                    <div id="dynamic-fields-container" class="min-h-[100px]">
+                        <!-- Slitting Section (Based on Printing Structure) -->
+                        <div id="section-slitting" class="dynamic-section animate-fade-in">
                             <h3 class="text-lg font-bold text-gray-800 mb-4 border-l-4 border-emerald-500 pl-3">Slitting
                                 Output</h3>
                             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                                 <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Input (kg)</label>
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Before (kg)</label>
                                     <input type="number" step="0.01"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Width (mm)</label>
-                                    <input type="number" step="0.1"
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Output (kg)</label>
+                                    <input type="number" step="0.01"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
@@ -138,19 +138,16 @@
                                         class="block w-full h-10 px-3 border border-red-300 bg-red-50 text-red-900 rounded-md focus:ring-red-500 focus:border-red-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Output Pcs</label>
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Actual Output</label>
                                     <input type="number"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Final Qty</label>
-                                    <input type="number"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
-                                </div>
-                                <div class="col-span-1">
-                                    <label class="block text-gray-600 text-xs font-bold mb-1">Tolerance</label>
-                                    <input type="number" step="0.01"
-                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                                <div class="col-span-1 md:col-span-2">
+                                    <label class="block text-gray-600 text-xs font-bold mb-1">Quality Check
+                                        Notes</label>
+                                    <input type="text"
+                                        class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
+                                        placeholder="Pass/Fail...">
                                 </div>
                             </div>
                         </div>
