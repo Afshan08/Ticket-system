@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Orders Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c7c7c7;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-slate-800 text-sm h-screen overflow-hidden">
+
+    <main id="main-content" class="flex flex-col h-full transition-all duration-300 ml-0 md:ml-64 p-6 box-border">
+        <!-- Header -->
+        <header class="mb-6 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Pending Orders Report</h1>
+                <p class="text-gray-500 text-sm">Track unstarted jobs and prioritize workflow</p>
+            </div>
+            <div class="flex space-x-2 mt-4 md:mt-0">
+                <button class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 shadow-sm generate-btn">
+                    Refresh Report
+                </button>
+            </div>
+        </header>
+
+        <!-- Filters -->
+        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6 flex flex-wrap gap-4 items-end">
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Customer</label>
+                <input type="text" id="filter-customer" placeholder="Search Customer..."
+                    class="block w-40 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Priority</label>
+                <select id="filter-priority"
+                    class="block w-40 px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    <option value="All">All</option>
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Report Content -->
+        <div class="flex-1 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+            <div class="overflow-x-auto flex-1 custom-scrollbar">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Job No</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Customer</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Product</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Qty Ordered</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Order Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Due Date</th>
+                            <th
+                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status</th>
+                            <th
+                                class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Content will be injected by JS -->
+                    </tbody>
+                    <tfoot class="bg-gray-50 sticky bottom-0">
+                        <tr>
+                            <td colspan="3" class="px-6 py-3 text-right font-bold text-gray-500">Total Pending Qty:</td>
+                            <td id="total-qty" class="px-6 py-3 text-right font-bold text-gray-900">0</td>
+                            <td colspan="4"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Report Footer -->
+            <div
+                class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex justify-between items-center text-sm text-gray-500">
+                <span id="record-count">Showing 0 records</span>
+                <span>Generated on: <span class="font-mono" id="current-date">--</span></span>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../js/mock_data.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('report-body');
+            const totalQtyEl = document.getElementById('total-qty');
+            const recordCountEl = document.getElementById('record-count');
+            const dateEl = document.getElementById('current-date');
+
+            // Filters
+            const customerFilter = document.getElementById('filter-customer');
+            const priorityFilter = document.getElementById('filter-priority');
+
+            // Init Date
+            dateEl.innerText = new Date().toLocaleDateString();
+
+            function renderTable() {
+                // Get Jobs
+                let jobs = getJobsWithDetails();
+
+                // Filter Logic: Pending Only + User Filters
+                jobs = jobs.filter(job => job.status === 'Pending' || job.status === 'In Progress'); // Showing active work
+
+                const customerTerm = customerFilter.value.toLowerCase();
+                const priorityTerm = priorityFilter.value;
+
+                if (customerTerm) {
+                    jobs = jobs.filter(j => j.customerName.toLowerCase().includes(customerTerm));
+                }
+                if (priorityTerm !== 'All') {
+                    jobs = jobs.filter(j => j.priority === priorityTerm);
+                }
+
+                // Sorting (Overdue first)
+                jobs.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+                // Render
+                tbody.innerHTML = '';
+                let totalQty = 0;
+
+                if (jobs.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-gray-500">No pending orders found matching filters.</td></tr>';
+                } else {
+                    jobs.forEach(job => {
+                        totalQty += job.qty;
+                        const isOverdue = new Date(job.dueDate) < new Date();
+                        const statusBadge = isOverdue ?
+                            `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Overdue</span>` :
+                            `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">On Time</span>`;
+
+                        const row = `
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">JOB-${job.id}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">${job.customerName}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${job.itemName}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-mono">${job.qty.toLocaleString()}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${job.orderDate}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 ${(isOverdue ? 'text-red-500 font-bold' : '')}">${job.dueDate}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center">${statusBadge}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-bold ${getPriorityColor(job.priority)}">${job.priority}</td>
+                            </tr>
+                        `;
+                        tbody.insertAdjacentHTML('beforeend', row);
+                    });
+                }
+
+                totalQtyEl.innerText = totalQty.toLocaleString();
+                recordCountEl.innerText = `Showing ${jobs.length} pending/active orders`;
+            }
+
+            function getPriorityColor(p) {
+                if (p === 'High') return 'text-red-600';
+                if (p === 'Medium') return 'text-amber-600';
+                return 'text-green-600';
+            }
+
+            // Events
+            customerFilter.addEventListener('input', renderTable);
+            priorityFilter.addEventListener('change', renderTable);
+            document.querySelector('.generate-btn').addEventListener('click', renderTable);
+
+            // Initial Render
+            renderTable();
+        });
+    </script>
+</body>
+
+</html>

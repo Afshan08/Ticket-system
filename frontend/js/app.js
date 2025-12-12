@@ -11,9 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
 /* --- Sidebar Logic --- */
 function injectSidebar() {
     // Path Detection
-    const isFormsDir = window.location.pathname.includes('/forms/');
-    const dashboardLink = isFormsDir ? '../index.html' : 'index.html';
-    const formPrefix = isFormsDir ? '' : 'forms/';
+    const path = window.location.pathname;
+    const isFormsDir = path.includes('/forms/');
+    const isReportsDir = path.includes('/reports/');
+
+    let dashboardLink = 'index.html';
+    let formPrefix = 'forms/';
+    let reportPrefix = 'reports/';
+
+    if (isFormsDir || isReportsDir) {
+        dashboardLink = '../index.html';
+        formPrefix = isFormsDir ? '' : '../forms/';
+        reportPrefix = isReportsDir ? '' : '../reports/';
+    }
 
     const sidebarHTML = `
         <!-- Mobile Backdrop -->
@@ -36,12 +46,14 @@ function injectSidebar() {
                 </button>
             </div>
             
-            <nav class="flex-1 overflow-y-auto py-4">
+            <nav class="flex-1 overflow-y-auto py-4 custom-scrollbar">
                 <div class="px-4 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-label">Main</div>
                 <a href="${dashboardLink}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
                     <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
+
+
 
                 <div class="px-4 mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-label">Master Data</div>
                 ${createNavLink('Area', formPrefix + 'area.html', 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z')}
@@ -57,6 +69,14 @@ function injectSidebar() {
                 ${createNavLink('Rewind Transaction', formPrefix + 'rewinding.html', 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15')}
                 ${createNavLink('Lamination Transaction', formPrefix + 'laminating.html', 'M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2')}
                 ${createNavLink('Slit Transaction', formPrefix + 'sliting.html', 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z')}
+
+                <div class="px-4 mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-label">Reports</div>
+                ${createNavLink('Production Details', reportPrefix + 'production_dashboard.html', 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z')}
+                ${createNavLink('Pending Orders', reportPrefix + 'pending_orders.html', 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z')}
+                ${createNavLink('Job Progress', reportPrefix + 'job_progress.html', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2')}
+                ${createNavLink('Print Output', reportPrefix + 'print_output.html', 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z')}
+                ${createNavLink('Rewind/Laminate', reportPrefix + 'rewinding_laminating.html', 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15')}
+                ${createNavLink('Slitting & Final', reportPrefix + 'slitting_final.html', 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z')}
             </nav>
         </div>
     `;

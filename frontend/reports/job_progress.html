@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Progress Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c7c7c7;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-slate-800 text-sm h-screen overflow-hidden">
+
+    <main id="main-content" class="flex flex-col h-full transition-all duration-300 ml-0 md:ml-64 p-6 box-border">
+        <!-- Header -->
+        <header class="mb-6 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Job Progress Updates</h1>
+                <p class="text-gray-500 text-sm">Real-time production floor status</p>
+            </div>
+            <button
+                class="bg-white border border-gray-300 px-4 py-2 rounded text-gray-600 hover:bg-gray-50 shadow-sm mt-4 md:mt-0">
+                Refresh Status
+            </button>
+        </header>
+
+        <!-- Progress List -->
+        <div class="flex-1 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+            <div class="overflow-y-auto flex-1 h-full p-0 custom-scrollbar">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50 sticky top-0 z-10">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Job Details</th>
+                            <th
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                                Stage Progress</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Current Stage</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Est. Completion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Content injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+    <script src="../js/mock_data.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('report-body');
+
+            function renderTable() {
+                const jobs = getJobsWithDetails();
+                const transactions = mockDB.transactions;
+
+                tbody.innerHTML = '';
+
+                jobs.forEach(job => {
+                    // Determine Progress and Stage based on transactions
+                    const jobTrans = transactions.filter(t => t.jobId === job.id);
+                    let progress = 0;
+                    let stage = 'Not Started';
+                    let color = 'gray';
+
+                    // Simple Logic: 
+                    // Printing exists -> 33%
+                    // Rewinding/Laminating -> 66%
+                    // Slitting -> 90%
+                    // Status Completed -> 100%
+
+                    const hasPrint = jobTrans.some(t => t.type === 'Printing');
+                    const hasConvert = jobTrans.some(t => t.type === 'Rewinding' || t.type === 'Laminating');
+                    const hasSlit = jobTrans.some(t => t.type === 'Slitting');
+
+                    if (job.status === 'Completed') {
+                        progress = 100;
+                        stage = 'Completed';
+                        color = 'green';
+                    } else if (hasSlit) {
+                        progress = 90;
+                        stage = 'Slitting / Final QC';
+                        color = 'indigo';
+                    } else if (hasConvert) {
+                        progress = 60;
+                        stage = 'Converting (Rewind/Lam)';
+                        color = 'amber';
+                    } else if (hasPrint) {
+                        progress = 30;
+                        stage = 'Printing in Progress';
+                        color = 'blue';
+                    } else {
+                        stage = 'Scheduled (Pre-Press)';
+                        color = 'gray';
+                    }
+
+                    const row = `
+                        <tr class="hover:bg-gray-50 transition-colors ${(job.status === 'Completed' ? 'bg-green-50' : '')}">
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-bold text-gray-900">JOB-${job.id}</div>
+                                <div class="text-sm text-gray-500">${job.customerName} - ${job.itemName}</div>
+                                <div class="text-xs text-gray-400 mt-1">Qty: ${job.qty.toLocaleString()}</div>
+                            </td>
+                            <td class="px-6 py-4 align-middle">
+                                <div class="relative pt-1">
+                                    <div class="flex mb-2 items-center justify-between">
+                                        <div>
+                                            <span class="text-xs font-semibold inline-block text-${color}-600">${progress}%</span>
+                                        </div>
+                                    </div>
+                                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-${color}-200">
+                                        <div style="width:${progress}%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-${color}-500 transition-all duration-500"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${color}-100 text-${color}-800">
+                                    ${stage}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                                ${job.dueDate}
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+
+            // Refresh Button
+            document.querySelector('button').addEventListener('click', renderTable);
+
+            renderTable();
+        });
+    </script>
+</body>
+
+</html>

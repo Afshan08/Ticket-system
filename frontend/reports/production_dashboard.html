@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c7c7c7;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .chart-placeholder {
+            background-image: repeating-linear-gradient(45deg, #f3f4f6 0, #f3f4f6 10px, #ffffff 10px, #ffffff 20px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-slate-800 text-sm h-screen overflow-hidden">
+
+    <main id="main-content" class="flex flex-col h-full transition-all duration-300 ml-0 md:ml-64 p-6 box-border">
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">Monthly Production Dashboard</h1>
+            <p class="text-gray-500 mt-1">Executive overview for November 2025</p>
+        </header>
+
+        <!-- Top KPIs -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- KPI 1 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500 font-bold uppercase text-xs">Total Production</h3>
+                    <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="flex items-baseline">
+                    <h2 class="text-3xl font-bold text-gray-800">--</h2>
+                    <span class="text-xs text-gray-500 ml-2">kg</span>
+                </div>
+                <p class="text-green-500 text-sm mt-2 font-medium">↑ 15% vs last month</p>
+            </div>
+
+            <!-- KPI 2 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500 font-bold uppercase text-xs">Efficiency Rate</h3>
+                    <span class="p-2 bg-green-50 text-green-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="flex items-baseline">
+                    <h2 class="text-3xl font-bold text-gray-800">92%</h2>
+                    <span class="text-xs text-gray-500 ml-2">OEE</span>
+                </div>
+                <p class="text-green-500 text-sm mt-2 font-medium">↑ 2% vs target</p>
+            </div>
+
+            <!-- KPI 3 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500 font-bold uppercase text-xs">Waste Ratio</h3>
+                    <span class="p-2 bg-red-50 text-red-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="flex items-baseline">
+                    <h2 class="text-3xl font-bold text-gray-800">--%</h2>
+                    <span class="text-xs text-gray-500 ml-2">Total</span>
+                </div>
+                <p class="text-red-500 text-sm mt-2 font-medium">Target: < 5%</p>
+            </div>
+
+            <!-- KPI 4 -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-500 font-bold uppercase text-xs">Jobs Completed</h3>
+                    <span class="p-2 bg-amber-50 text-amber-600 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="flex items-baseline">
+                    <h2 class="text-3xl font-bold text-gray-800">--</h2>
+                    <span class="text-xs text-gray-500 ml-2">Jobs</span>
+                </div>
+                <p class="text-gray-400 text-sm mt-2 font-medium">This Month</p>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 flex-1">
+            <!-- Chart 1: Output Trend -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Production Output Trend (Last 7 Days)</h3>
+                <div
+                    class="w-full flex-1 border border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 relative overflow-hidden">
+                    <!-- Fake Bars for visualization -->
+                    <div class="flex items-end space-x-4 h-40">
+                        <div class="w-8 bg-indigo-300 h-20 rounded-t"></div>
+                        <div class="w-8 bg-indigo-400 h-24 rounded-t"></div>
+                        <div class="w-8 bg-indigo-500 h-32 rounded-t"></div>
+                        <div class="w-8 bg-indigo-600 h-28 rounded-t"></div>
+                        <div class="w-8 bg-indigo-500 h-36 rounded-t"></div>
+                        <div class="w-8 bg-indigo-400 h-30 rounded-t"></div>
+                        <div class="w-8 bg-indigo-300 h-24 rounded-t"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart 2: Waste by Machine -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">Waste Distribution by Machine</h3>
+                <div
+                    class="w-full flex-1 border border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50 overflow-hidden relative">
+                    <!-- Simple CSS Bar Chart for machine waste -->
+                    <div id="waste-chart" class="flex items-end justify-around w-full h-full p-4 space-x-2">
+                        <!-- Bars injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script src="../js/mock_data.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Total Production Output (Sum of all output weights)
+            const totalOutput = mockDB.transactions.reduce((acc, t) => acc + t.outputWeight, 0);
+            document.querySelector('h2.text-3xl').innerText = Math.round(totalOutput).toLocaleString();
+
+            // 3. Efficiency/Waste
+            const totalInput = mockDB.transactions.reduce((acc, t) => acc + t.inputWeight, 0);
+            const totalWaste = mockDB.transactions.reduce((acc, t) => acc + t.waste, 0);
+            const wasteRatio = totalInput > 0 ? (totalWaste / totalInput * 100).toFixed(1) : 0;
+
+            // Update Waste KPI card (found by index 2 mostly, but let's use text content search safe-ish or just index)
+            const kpiCards = document.querySelectorAll('.bg-white.p-6');
+
+            // Card 3: Waste
+            const wasteCard = kpiCards[2];
+            wasteCard.querySelector('h2').innerText = `${wasteRatio}%`;
+
+            // 4. Jobs Completed
+            const completedJobs = mockDB.jobs.filter(j => j.status === 'Completed').length;
+            const jobsCard = kpiCards[3];
+            jobsCard.querySelector('h2').innerText = completedJobs;
+
+            // Chart logic (Waste by Machine)
+            const wasteChart = document.getElementById('waste-chart');
+            const machineWaste = {};
+
+            mockDB.transactions.forEach(t => {
+                const m = getById('machines', t.machineId);
+                if (m) {
+                    machineWaste[m.name] = (machineWaste[m.name] || 0) + t.waste;
+                }
+            });
+
+            // Find max for scaling
+            const maxWaste = Math.max(...Object.values(machineWaste), 1);
+
+            Object.entries(machineWaste).forEach(([name, val]) => {
+                const heightPct = (val / maxWaste) * 100;
+                // Limit height to 90% to assume space for text
+                const displayHeight = Math.max(heightPct * 0.8, 10);
+
+                const bar = `
+                    <div class="flex flex-col items-center justify-end h-full w-12 group">
+                        <div class="w-full bg-indigo-500 rounded-t hover:bg-indigo-600 transition-all relative" style="height: ${displayHeight}%">
+                             <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-gray-700 bg-white px-1 rounded shadow hidden group-hover:block">${Math.round(val)}</div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1 truncate w-12 text-center" title="${name}">${name}</div>
+                    </div>
+                 `;
+                wasteChart.insertAdjacentHTML('beforeend', bar);
+            });
+        });
+    </script>
+</body>
+
+</html>
