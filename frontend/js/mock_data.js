@@ -42,15 +42,23 @@ const mockDB = {
         { id: 4, name: "John Doe", role: "Printer", shift: "Night" },
         { id: 5, name: "Jane Smith", role: "Finisher", shift: "Day" }
     ],
-    jobs: [
-        { id: 101, customerId: 1, itemId: 1, qty: 50000, status: "Pending", orderDate: "2025-11-20", dueDate: "2025-12-05", priority: "High" },
-        { id: 102, customerId: 2, itemId: 2, qty: 100000, status: "In Progress", orderDate: "2025-11-25", dueDate: "2025-12-15", priority: "Medium" },
-        { id: 103, customerId: 3, itemId: 5, qty: 25000, status: "Completed", orderDate: "2025-11-15", dueDate: "2025-11-30", priority: "Low" },
-        { id: 104, customerId: 4, itemId: 4, qty: 120000, status: "In Progress", orderDate: "2025-12-01", dueDate: "2025-12-20", priority: "High" },
-        { id: 105, customerId: 5, itemId: 6, qty: 15000, status: "Pending", orderDate: "2025-12-05", dueDate: "2025-12-12", priority: "High" },
-        { id: 106, customerId: 1, itemId: 5, qty: 80000, status: "Completed", orderDate: "2025-11-10", dueDate: "2025-11-25", priority: "Medium" }
+    jobOrders: [
+        { id: 101, customerId: 1, status: "Pending", orderDate: "2025-11-20", dueDate: "2025-12-05", priority: "High", remarks: "Urgent delivery" },
+        { id: 102, customerId: 2, status: "In Progress", orderDate: "2025-11-25", dueDate: "2025-12-15", priority: "Medium", remarks: "" },
+        { id: 103, customerId: 3, status: "Completed", orderDate: "2025-11-15", dueDate: "2025-11-30", priority: "Low", remarks: "" },
+        { id: 104, customerId: 4, status: "In Progress", orderDate: "2025-12-01", dueDate: "2025-12-20", priority: "High", remarks: "Partial shipment allowed" },
+        { id: 105, customerId: 5, status: "Pending", orderDate: "2025-12-05", dueDate: "2025-12-12", priority: "High", remarks: "" },
+        { id: 106, customerId: 1, status: "Completed", orderDate: "2025-11-10", dueDate: "2025-11-25", priority: "Medium", remarks: "" }
     ],
-    // Transactions: linked to Jobs
+    jobOrderItems: [
+        { id: 1, jobId: 101, itemId: 1, qty: 50000, notes: "Standard run" },
+        { id: 2, jobId: 102, itemId: 2, qty: 100000, notes: "" },
+        { id: 3, jobId: 103, itemId: 5, qty: 25000, notes: "" },
+        { id: 4, jobId: 104, itemId: 4, qty: 120000, notes: "" },
+        { id: 5, jobId: 105, itemId: 6, qty: 15000, notes: "" },
+        { id: 6, jobId: 106, itemId: 5, qty: 80000, notes: "" }
+    ],
+    // Transactions: linked to Job IDs (which remain the same: 101, 102...)
     // Type: Printing, Rewinding, Laminating, Slitting
     transactions: [
         // Job 102 (In Progress - Printing Done)
@@ -72,36 +80,81 @@ const mockDB = {
     ]
 };
 
-// Helper to simulate API call
+// Helper to simulate API call (with LocalStorage persistence)
 const getData = (table) => {
+    // Adapter for backward compatibility or direct access
+    if (table === 'jobs') return getJobsWithDetails();
+
+    // Try LocalStorage first
+    const local = localStorage.getItem('db_' + table);
+    if (local) {
+        return JSON.parse(local);
+    }
+
+    // Fallback to initial mockDB
     return mockDB[table] || [];
 };
 
+const saveData = (table, data) => {
+    localStorage.setItem('db_' + table, JSON.stringify(data));
+    // Also update in-memory for immediate access in same script execution if needed
+    if (mockDB[table]) mockDB[table] = data;
+};
+
 const getById = (table, id) => {
-    return mockDB[table].find(item => item.id == id);
+    const data = getData(table);
+    return data.find(item => item.id == id);
 };
 
 // Report Helpers
 const getJobsWithDetails = () => {
-    return mockDB.jobs.map(job => {
-        const customer = getById('customers', job.customerId);
-        const item = getById('items', job.itemId);
-        return { ...job, customerName: customer ? customer.name : 'Unknown', itemName: item ? item.name : 'Unknown' };
+    const jobs = getData('jobOrders');
+    const allItems = getData('jobOrderItems');
+    const customers = getData('customers');
+    const itemsDef = getData('items');
+    const categories = getData('categories');
+
+    return jobs.map(job => {
+        const customer = customers.find(c => c.id == job.customerId);
+
+        // Find all items for this job
+        const items = allItems.filter(item => item.jobId === job.id).map(lineItem => {
+            const itemDef = itemsDef.find(i => i.id == lineItem.itemId);
+            const category = itemDef ? categories.find(c => c.id == itemDef.categoryId) : null;
+            return {
+                ...lineItem,
+                name: itemDef ? itemDef.name : 'Unknown',
+                specs: itemDef ? itemDef.specs : '',
+                categoryName: category ? category.name : ''
+            };
+        });
+
+        // Backward compatibility
+        const firstItem = items.length > 0 ? items[0] : null;
+
+        return {
+            ...job,
+            customerName: customer ? customer.name : 'Unknown',
+            items: items,
+            itemId: firstItem ? firstItem.itemId : null,
+            itemName: firstItem ? firstItem.name : 'Multiple Items',
+            qty: items.reduce((sum, i) => sum + i.qty, 0),
+        };
     });
 };
 
 const getTransactionsWithDetails = (typeFilter = null) => {
-    let trans = mockDB.transactions;
+    let trans = getData('transactions');
     if (typeFilter) {
         trans = trans.filter(t => t.type === typeFilter);
     }
     return trans.map(t => {
-        const job = getById('jobs', t.jobId);
+        const jobOrder = mockDB.jobOrders.find(j => j.id == t.jobId);
         const machine = getById('machines', t.machineId);
         const operator = getById('operators', t.operatorId);
         return {
             ...t,
-            jobNo: job ? `JOB-${job.id}` : 'JOB-?',
+            jobNo: jobOrder ? `JOB-${jobOrder.id}` : 'JOB-?',
             machineName: machine ? machine.name : 'Unknown',
             operatorName: operator ? operator.name : 'Unknown'
         };

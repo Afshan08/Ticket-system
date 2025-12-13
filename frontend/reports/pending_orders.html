@@ -162,7 +162,9 @@
 
                         const row = `
                             <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">JOB-${job.id}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="job_order_report.html?id=${job.id}" class="text-indigo-600 hover:text-indigo-900 underline">JOB-${job.id}</a>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">${job.customerName}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${job.itemName}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-mono">${job.qty.toLocaleString()}</td>

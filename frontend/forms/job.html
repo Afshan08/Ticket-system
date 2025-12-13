@@ -18,16 +18,17 @@
                 </svg>
             </button>
         </div>
-        <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <h2 class="text-2xl font-bold mb-6 text-indigo-700 border-b pb-2">Job Order</h2>
+        <div class="max-w-6xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold mb-6 text-indigo-700 border-b pb-2">Create Job Order</h2>
 
-            <form>
+            <form id="job-form">
+                <!-- Master Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <!-- Customer Lookup -->
                     <div>
                         <label class="block text-gray-700 text-sm font-bold mb-2">Customer</label>
                         <div class="flex">
-                            <input type="text" id="custName" readonly
+                            <input type="text" id="custName" readonly required
                                 class="shadow-sm border rounded-l w-full py-2 px-3 text-gray-700 leading-tight bg-gray-50 border-gray-300"
                                 placeholder="Select Customer...">
                             <input type="hidden" id="custId">
@@ -39,54 +40,90 @@
                         </div>
                     </div>
 
-                    <!-- Item Lookup -->
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Item to Produce</label>
-                        <div class="flex">
-                            <input type="text" id="itemName" readonly
-                                class="shadow-sm border rounded-l w-full py-2 px-3 text-gray-700 leading-tight bg-gray-50 border-gray-300"
-                                placeholder="Select Item...">
-                            <input type="hidden" id="itemId">
-                            <button type="button"
-                                class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded-r border border-l-0 border-gray-300 lookup-btn"
-                                data-table="items" data-target-id="itemId" data-target-name="itemName">
-                                Search
-                            </button>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Order Date</label>
+                            <input type="date" id="orderDate" required
+                                class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Due Date</label>
+                            <input type="date" id="dueDate" required
+                                class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Order Qty</label>
-                        <input type="number"
-                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Order Date</label>
-                        <input type="date"
-                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Due Date</label>
-                        <input type="date"
-                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
-                    </div>
-                </div>
-
                 <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Internal Remarks</label>
-                    <textarea
-                        class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300"
-                        rows="3"></textarea>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-gray-700 text-sm font-bold">Line Items</label>
+                        <button type="button" onclick="addLineItem()"
+                            class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold py-2 px-3 rounded flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            Add Item
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200" id="lines-table">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                                        Item</th>
+                                    <th
+                                        class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                                        Qty</th>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Notes / Spec</th>
+                                    <th
+                                        class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
+                                        Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="lines-body">
+                                <!-- Dynamic Lines -->
+                            </tbody>
+                            <tfoot class="bg-gray-50">
+                                <tr>
+                                    <td class="px-4 py-3 text-right font-bold text-gray-700">Total Qty:</td>
+                                    <td class="px-4 py-3 text-right font-bold text-indigo-600" id="total-qty">0</td>
+                                    <td colspan="2"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="flex items-center justify-between">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Priority</label>
+                        <select id="priority"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
+                            <option>Medium</option>
+                            <option>High</option>
+                            <option>Low</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Internal Remarks</label>
+                        <textarea id="remarks"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300"
+                            rows="1"></textarea>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between border-t pt-6">
                     <a href="../index.html" class="text-gray-500 hover:text-gray-700 font-medium">Cancel</a>
-                    <button
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors"
+                    <button id="save-btn"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors shadow-lg transform hover:-translate-y-0.5"
                         type="button">
-                        Create Job
+                        Create Job Order
                     </button>
                 </div>
             </form>
@@ -95,6 +132,141 @@
 
     <script src="../js/mock_data.js"></script>
     <script src="../js/app.js"></script>
+    <script>
+        // Line Item Logic
+        let lineCount = 0;
+
+        function addLineItem() {
+            lineCount++;
+            const tbody = document.getElementById('lines-body');
+            const rowId = `line-${lineCount}`;
+
+            const row = `
+                <tr id="${rowId}">
+                    <td class="px-4 py-2">
+                        <div class="flex">
+                            <input type="text" id="itemName_${lineCount}" readonly required
+                                class="shadow-sm border rounded-l w-full py-1 px-2 text-sm text-gray-700 bg-gray-50 border-gray-300"
+                                placeholder="Select Item...">
+                            <input type="hidden" id="itemId_${lineCount}" class="line-item-id">
+                            <button type="button"
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-600 px-3 rounded-r border border-l-0 border-gray-300 lookup-btn"
+                                data-table="items" data-target-id="itemId_${lineCount}" data-target-name="itemName_${lineCount}">
+                                🔍
+                            </button>
+                        </div>
+                    </td>
+                    <td class="px-4 py-2">
+                        <input type="number" class="w-full border-gray-300 rounded text-right text-sm py-1 line-qty" 
+                            oninput="updateTotals()" placeholder="0" min="1">
+                    </td>
+                    <td class="px-4 py-2">
+                        <input type="text" class="w-full border-gray-300 rounded text-sm py-1 line-notes" placeholder="Specific requirements...">
+                    </td>
+                    <td class="px-4 py-2 text-center">
+                        <button type="button" onclick="removeLine('${rowId}')" 
+                            class="text-red-500 hover:text-red-700 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            `;
+            tbody.insertAdjacentHTML('beforeend', row);
+        }
+
+        function removeLine(id) {
+            document.getElementById(id).remove();
+            updateTotals();
+        }
+
+        function updateTotals() {
+            const qtys = document.querySelectorAll('.line-qty');
+            let total = 0;
+            qtys.forEach(input => total += Number(input.value) || 0);
+            document.getElementById('total-qty').innerText = total.toLocaleString();
+        }
+
+        // Initialize with one line
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default dates
+            document.getElementById('orderDate').valueAsDate = new Date();
+            const due = new Date();
+            due.setDate(due.getDate() + 14);
+            document.getElementById('dueDate').valueAsDate = due;
+
+            // Add first line
+            addLineItem();
+
+            // Save Handler
+            document.getElementById('save-btn').addEventListener('click', saveJobOrder);
+        });
+
+        function saveJobOrder() {
+            // Validate Master
+            const custId = document.getElementById('custId').value;
+            if (!custId) { alert('Please select a customer'); return; }
+
+            // Validate Lines
+            const lines = [];
+            const rows = document.getElementById('lines-body').querySelectorAll('tr');
+            let hasError = false;
+
+            rows.forEach(row => {
+                const itemId = row.querySelector('.line-item-id').value;
+                const qty = row.querySelector('.line-qty').value;
+                const notes = row.querySelector('.line-notes').value;
+
+                if (!itemId || !qty || Number(qty) <= 0) {
+                    hasError = true;
+                }
+                lines.push({ itemId, qty: Number(qty), notes });
+            });
+
+            if (lines.length === 0 || hasError) {
+                alert('Please ensure all lines have selected items and valid quantities.');
+                return;
+            }
+
+            // Create Objects
+            // Get current data first to determine ID
+            const currentJobs = getData('jobOrders');
+            const currentItems = getData('jobOrderItems');
+
+            const newJobId = (currentJobs.length > 0 ? Math.max(...currentJobs.map(j => j.id)) : 100) + 1;
+
+            const newJob = {
+                id: newJobId,
+                customerId: Number(custId),
+                status: 'Pending',
+                orderDate: document.getElementById('orderDate').value,
+                dueDate: document.getElementById('dueDate').value,
+                priority: document.getElementById('priority').value,
+                remarks: document.getElementById('remarks').value
+            };
+
+            // Save Job Master
+            currentJobs.push(newJob);
+            saveData('jobOrders', currentJobs);
+
+            // Save Items
+            lines.forEach((line, index) => {
+                const nextItemId = (currentItems.length > 0 ? Math.max(...currentItems.map(i => i.id)) : 0) + 1 + index;
+                currentItems.push({
+                    id: nextItemId,
+                    jobId: newJobId,
+                    itemId: Number(line.itemId),
+                    qty: line.qty,
+                    notes: line.notes
+                });
+            });
+            saveData('jobOrderItems', currentItems);
+
+            // Redirect to Report
+            window.location.href = `../reports/job_order_report.html?id=${newJobId}`;
+        }
+    </script>
 </body>
 
 </html>
