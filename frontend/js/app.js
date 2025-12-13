@@ -11,9 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
 /* --- Sidebar Logic --- */
 function injectSidebar() {
     // Path Detection
-    const path = window.location.pathname;
-    const isFormsDir = path.includes('/forms/');
-    const isReportsDir = path.includes('/reports/');
+    // Normalize path to use forward slashes for Windows compatibility and case-insensitive
+    const path = window.location.pathname.replace(/\\/g, '/').toLowerCase();
+    const isFormsDir = path.includes('/forms/') || path.includes('/forms');
+    const isReportsDir = path.includes('/reports/') || path.includes('/reports');
 
     let dashboardLink = 'index.html';
     let formPrefix = 'forms/';
@@ -49,7 +50,7 @@ function injectSidebar() {
             <nav class="flex-1 overflow-y-auto py-4 custom-scrollbar">
                 <div class="px-4 mb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider sidebar-label">Main</div>
                 <a href="${dashboardLink}" class="flex items-center px-4 py-3 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                    <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                    <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
                     <span class="sidebar-text">Dashboard</span>
                 </a>
 
@@ -75,8 +76,7 @@ function injectSidebar() {
                 ${createNavLink('Pending Orders', reportPrefix + 'pending_orders.html', 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z')}
                 ${createNavLink('Job Progress', reportPrefix + 'job_progress.html', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2')}
                 ${createNavLink('Print Output', reportPrefix + 'print_output.html', 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z')}
-                ${createNavLink('Rewind/Laminate', reportPrefix + 'rewinding_laminating.html', 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15')}
-                ${createNavLink('Slitting & Final', reportPrefix + 'slitting_final.html', 'M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z')}
+
             </nav>
         </div>
     `;

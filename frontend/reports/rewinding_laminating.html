@@ -41,7 +41,17 @@
 
 <body class="bg-gray-50 text-slate-800 text-sm h-screen overflow-hidden">
 
-    <main id="main-content" class="flex flex-col h-full transition-all duration-300 ml-0 md:ml-64 p-6 box-border">
+    <main id="main-content"
+        class="flex flex-col h-full transition-all duration-300 ml-0 md:ml-64 p-3 md:p-6 box-border">
+        <!-- Mobile Menu Button -->
+        <div class="md:hidden mb-2">
+            <button id="mobile-menu-btn" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
         <!-- Header -->
         <header class="mb-6 flex flex-col md:flex-row justify-between items-center">
             <div>
