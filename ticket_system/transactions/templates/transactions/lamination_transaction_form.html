@@ -25,52 +25,50 @@
             <!-- Header Bar -->
             <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
                 <h2 class="text-xl font-bold text-indigo-700">Lamination Transaction</h2>
-                <div class="flex space-x-3">
-                    <a href="../index.html"
-                        class="px-4 py-2 rounded text-gray-500 hover:text-gray-700 font-medium hover:bg-gray-100 transition-colors flex items-center">Cancel</a>
-                    <button
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-8 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-                        type="button">
-                        Save
-                    </button>
-                </div>
             </div>
 
             <!-- Scrollable Form Area -->
             <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                <form id="transaction-form" class="space-y-6">
+                <form method="post" id="transaction-form" class="space-y-6">
+                    {% csrf_token %}
 
-                    <!-- Top Controls Grid: Used 12-col grid for precise control -->
+                    {% if form.non_field_errors %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        {{ form.non_field_errors }}
+                    </div>
+                    {% endif %}
+
+                    <!-- Top Controls Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-                        <!-- Trans No: 3 cols -->
                         <div class="col-span-1 md:col-span-3">
                             <label class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Trans
                                 No.</label>
-                            <input type="text" value="001" readonly
+                            <input type="text"
+                                value="{% if form.instance.pk %}{{ form.instance.pk }}{% else %}New{% endif %}" readonly
                                 class="block w-full h-10 px-3 border border-gray-300 rounded-md bg-gray-100 text-gray-600 font-mono shadow-sm">
                         </div>
-
-                        <!-- Date: 3 cols -->
                         <div class="col-span-1 md:col-span-3">
                             <label
                                 class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Date</label>
-                            <input type="date"
+                            <input type="date" name="date" id="id_date" value="{{ form.date.value|date:'Y-m-d' }}"
                                 class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+                            {% if form.date.errors %}<p class="text-red-500 text-xs italic mt-1">{{ form.date.errors.0
+                                }}</p>{% endif %}
                         </div>
-                        <!-- Job: 6 cols -->
                         <div class="col-span-1 md:col-span-6">
                             <label class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Job
                                 No.</label>
-                            <div class="flex shadow-sm rounded-md h-10">
-                                <input type="text" id="jobId" readonly
-                                    class="flex-1 block w-full px-3 border border-gray-300 rounded-none rounded-l-md focus:ring-indigo-500 focus:border-indigo-500"
-                                    placeholder="Select Job...">
-                                <button type="button"
-                                    class="inline-flex items-center px-4 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 rounded-r-md hover:bg-gray-100 lookup-btn"
-                                    data-table="jobs" data-target-id="jobId" data-target-name="jobId">
-                                    🔍
-                                </button>
-                            </div>
+                            <select name="job_order" id="id_job_order"
+                                class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 {% if form.job_order.errors %}border-red-500{% endif %}">
+                                <option value="">Select Job...</option>
+                                {% for choice in form.fields.job_order.queryset %}
+                                <option value="{{ choice.pk }}" {% if
+                                    form.job_order.value|stringformat:"s"==choice.pk|stringformat:"s" %}selected{% endif
+                                    %}>{{ choice }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form.job_order.errors %}<p class="text-red-500 text-xs italic mt-1">{{
+                                form.job_order.errors.0 }}</p>{% endif %}
                         </div>
                     </div>
 
@@ -79,45 +77,44 @@
                         <div>
                             <label
                                 class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Product</label>
-                            <input type="text" id="productName" readonly
+                            <input type="text" readonly
                                 class="block w-full h-10 px-3 border border-gray-300 rounded-md bg-gray-50 text-gray-700 shadow-sm"
-                                placeholder="--">
+                                placeholder="Auto-populated">
                         </div>
                         <div>
                             <label
                                 class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Machine</label>
-                            <div class="flex shadow-sm rounded-md h-10">
-                                <input type="text" id="machineName" readonly
-                                    class="flex-1 block w-full px-3 border border-gray-300 rounded-none rounded-l-md focus:ring-indigo-500 focus:border-indigo-500"
-                                    placeholder="Select...">
-                                <input type="hidden" id="machineId">
-                                <button type="button"
-                                    class="inline-flex items-center px-4 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 rounded-r-md hover:bg-gray-100 lookup-btn"
-                                    data-table="machines" data-target-id="machineId" data-target-name="machineName">
-                                    🔍
-                                </button>
-                            </div>
+                            <select name="machine" id="id_machine"
+                                class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 {% if form.machine.errors %}border-red-500{% endif %}">
+                                <option value="">Select Machine...</option>
+                                {% for choice in form.fields.machine.queryset %}
+                                <option value="{{ choice.pk }}" {% if
+                                    form.machine.value|stringformat:"s"==choice.pk|stringformat:"s" %}selected{% endif
+                                    %}>{{ choice.name }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form.machine.errors %}<p class="text-red-500 text-xs italic mt-1">{{
+                                form.machine.errors.0 }}</p>{% endif %}
                         </div>
                         <div>
                             <label
                                 class="block text-gray-700 text-xs font-bold mb-1.5 uppercase tracking-wider">Operator</label>
-                            <div class="flex shadow-sm rounded-md h-10">
-                                <input type="text" id="opName" readonly
-                                    class="flex-1 block w-full px-3 border border-gray-300 rounded-none rounded-l-md focus:ring-indigo-500 focus:border-indigo-500"
-                                    placeholder="Select...">
-                                <input type="hidden" id="opId">
-                                <button type="button"
-                                    class="inline-flex items-center px-4 border border-l-0 border-gray-300 bg-gray-50 text-gray-500 rounded-r-md hover:bg-gray-100 lookup-btn"
-                                    data-table="operators" data-target-id="opId" data-target-name="opName">
-                                    🔍
-                                </button>
-                            </div>
+                            <select name="operator" id="id_operator"
+                                class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 {% if form.operator.errors %}border-red-500{% endif %}">
+                                <option value="">Select Operator...</option>
+                                {% for choice in form.fields.operator.queryset %}
+                                <option value="{{ choice.pk }}" {% if
+                                    form.operator.value|stringformat:"s"==choice.pk|stringformat:"s" %}selected{% endif
+                                    %}>{{ choice.name }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form.operator.errors %}<p class="text-red-500 text-xs italic mt-1">{{
+                                form.operator.errors.0 }}</p>{% endif %}
                         </div>
                     </div>
 
-                    <!-- Dynamic Sections -->
+                    <!-- Lamination Fields -->
                     <div id="dynamic-fields-container" class="min-h-[100px]">
-                        <!-- Lamination Section (Based on Printing Structure) -->
                         <div id="section-lamination" class="dynamic-section animate-fade-in">
                             <div class="border-b-2 border-gray-200 mb-6 mt-2 relative">
                                 <div class="absolute top-0 left-0 w-16 h-full border-b-2 border-blue-500"></div>
@@ -125,35 +122,41 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                                 <div class="col-span-1">
                                     <label class="block text-gray-600 text-xs font-bold mb-1">Plain weight (kg)</label>
-                                    <input type="number" step="0.01"
+                                    <input type="number" step="0.01" name="plain_weight" id="id_plain_weight"
+                                        value="{{ form.plain_weight.value|default_if_none:'' }}"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
                                     <label class="block text-gray-600 text-xs font-bold mb-1">Printed weight
                                         (kg)</label>
-                                    <input type="number" step="0.01"
+                                    <input type="number" step="0.01" name="printed_weight" id="id_printed_weight"
+                                        value="{{ form.printed_weight.value|default_if_none:'' }}"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
                                     <label class="block text-gray-600 text-xs font-bold mb-1">Laminated weight
                                         (kg)</label>
-                                    <input type="number" step="0.01"
+                                    <input type="number" step="0.01" name="laminated_weight" id="id_laminated_weight"
+                                        value="{{ form.laminated_weight.value|default_if_none:'' }}"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
                                     <label class="block text-red-600 text-xs font-bold mb-1">Wastage (kg)</label>
-                                    <input type="number" step="0.01"
+                                    <input type="number" step="0.01" name="wastage" id="id_wastage"
+                                        value="{{ form.wastage.value|default_if_none:'' }}"
                                         class="block w-full h-10 px-3 border border-red-300 bg-red-50 text-red-900 rounded-md focus:ring-red-500 focus:border-red-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
                                     <label class="block text-gray-600 text-xs font-bold mb-1">Actual Output</label>
-                                    <input type="number"
+                                    <input type="number" step="0.01" name="actual_output" id="id_actual_output"
+                                        value="{{ form.actual_output.value|default_if_none:'' }}"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                                 </div>
                                 <div class="col-span-1">
                                     <label class="block text-gray-600 text-xs font-bold mb-1">Quality Check
                                         Notes</label>
-                                    <input type="text"
+                                    <input type="text" name="qc_notes" id="id_qc_notes"
+                                        value="{{ form.qc_notes.value|default_if_none:'' }}"
                                         class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm"
                                         placeholder="Pass/Fail...">
                                 </div>
@@ -161,29 +164,38 @@
                         </div>
                     </div>
 
-                    <!-- Footer: Time & Remarks FIXED BOTTOM -->
+                    <!-- Footer -->
                     <div class="pt-4 border-t border-gray-100 bg-gray-50 -mx-6 -mb-6 p-6 mt-auto">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div>
                                 <label
                                     class="block text-gray-500 text-xs font-bold mb-1.5 uppercase tracking-wider">Start
                                     Time</label>
-                                <input type="time"
+                                <input type="time" name="start_time" id="id_start_time"
+                                    value="{{ form.start_time.value|time:'H:i' }}"
                                     class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                             </div>
                             <div>
                                 <label class="block text-gray-500 text-xs font-bold mb-1.5 uppercase tracking-wider">End
                                     Time</label>
-                                <input type="time"
+                                <input type="time" name="end_time" id="id_end_time"
+                                    value="{{ form.end_time.value|time:'H:i' }}"
                                     class="block w-full h-10 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
                             </div>
                             <div class="col-span-1 md:col-span-2">
                                 <label
                                     class="block text-gray-500 text-xs font-bold mb-1.5 uppercase tracking-wider">Remarks</label>
-                                <textarea
+                                <textarea name="remarks" id="id_remarks"
                                     class="block w-full h-14 py-2 px-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 shadow-sm resize-none custom-scrollbar"
-                                    placeholder="Any operational notes..."></textarea>
+                                    placeholder="Any operational notes...">{{ form.remarks.value|default_if_none:'' }}</textarea>
                             </div>
+                        </div>
+                        <div class="mt-4 flex justify-end gap-3">
+                            <a href="{% url 'laminationtransaction_list' %}"
+                                class="px-4 py-2 rounded text-gray-500 hover:text-gray-700 font-medium hover:bg-gray-100 transition-colors flex items-center">Cancel</a>
+                            <button
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-8 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                                type="submit">Save</button>
                         </div>
                     </div>
                 </form>

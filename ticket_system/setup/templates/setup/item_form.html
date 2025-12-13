@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Item</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+    <main id="main-content" class="p-8 transition-all duration-300 min-h-screen ml-0 md:ml-64">
+        <div class="md:hidden mb-4">
+            <button id="mobile-menu-btn" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Item Details</h2>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="flex flex-col">
+                        <label for="id_name" class="block text-gray-700 text-sm font-bold mb-2">Item Name</label>
+                        <input type="text" name="name" id="id_name" value="{{ form.name.value|default_if_none:'' }}"
+                            aria-label="Item Name"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300 {% if form.name.errors %}border-red-500{% endif %}">
+                        {% if form.name.errors %}
+                        <p class="text-red-500 text-xs italic mt-1" role="alert">{{ form.name.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="id_category" class="block text-gray-700 text-sm font-bold mb-2">Category</label>
+                        <div class="flex">
+                            <input type="text" id="categoryName" readonly
+                                value="{% if form.category.value %}{{ form.instance.category }}{% endif %}"
+                                class="shadow-sm border rounded-l w-full py-2 px-3 text-gray-700 leading-tight bg-gray-50 border-gray-300"
+                                placeholder="Select Category..." aria-label="Selected category">
+                            <input type="hidden" name="category" id="id_category"
+                                value="{{ form.category.value|default_if_none:'' }}">
+                            <button type="button"
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded-r border border-l-0 border-gray-300 lookup-btn"
+                                data-table="categories" data-target-id="id_category" data-target-name="categoryName"
+                                aria-label="Search for category">
+                                Search
+                            </button>
+                        </div>
+                        {% if form.category.errors %}
+                        <p class="text-red-500 text-xs italic mt-1" role="alert">{{ form.category.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="flex flex-col">
+                        <label for="id_gsm" class="block text-gray-700 text-sm font-bold mb-2">GSM</label>
+                        <input type="number" name="gsm" id="id_gsm" step="0.01"
+                            value="{{ form.gsm.value|default_if_none:'' }}" aria-label="GSM Weight"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300 {% if form.gsm.errors %}border-red-500{% endif %}">
+                        {% if form.gsm.errors %}
+                        <p class="text-red-500 text-xs italic mt-1" role="alert">{{ form.gsm.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="id_width" class="block text-gray-700 text-sm font-bold mb-2">Width (mm)</label>
+                        <input type="number" name="width" id="id_width" step="0.01"
+                            value="{{ form.width.value|default_if_none:'' }}" aria-label="Width in millimeters"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300 {% if form.width.errors %}border-red-500{% endif %}">
+                        {% if form.width.errors %}
+                        <p class="text-red-500 text-xs italic mt-1" role="alert">{{ form.width.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="id_thickness" class="block text-gray-700 text-sm font-bold mb-2">Thickness
+                            (μ)</label>
+                        <input type="number" name="thickness" id="id_thickness" step="0.001"
+                            value="{{ form.thickness.value|default_if_none:'' }}" aria-label="Thickness in microns"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300 {% if form.thickness.errors %}border-red-500{% endif %}">
+                        {% if form.thickness.errors %}
+                        <p class="text-red-500 text-xs italic mt-1" role="alert">{{ form.thickness.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="id_specifications"
+                        class="block text-gray-700 text-sm font-bold mb-2">Specifications</label>
+                    <textarea name="specifications" id="id_specifications" aria-label="Item Specifications"
+                        placeholder="Size, Material, etc."
+                        class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300 {% if form.specifications.errors %}border-red-500{% endif %}"
+                        rows="3">{{ form.specifications.value|default_if_none:'' }}</textarea>
+                    {% if form.specifications.errors %}
+                    <p class="text-red-500 text-xs italic mt-1" role="alert">{{ form.specifications.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="mb-6 w-1/2">
+                    <label for="id_unit_price" class="block text-gray-700 text-sm font-bold mb-2">Unit Price</label>
+                    <input type="number" name="unit_price" id="id_unit_price" step="0.01"
+                        value="{{ form.unit_price.value|default_if_none:'' }}" {% if form.fields.unit_price.disabled%}readonly{% endif %} aria-label="Unit Price"
+                        class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300 {% if form.fields.unit_price.disabled %}bg-gray-50{% endif %} {% if form.unit_price.errors %}border-red-500{% endif %}">
+                    {% if form.unit_price.errors %}
+                    <p class="text-red-500 text-xs italic mt-1" role="alert">{{ form.unit_price.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <a href="{% url 'item_list' %}" class="text-gray-500 hover:text-gray-700 font-medium"
+                        aria-label="Cancel and return to list">Cancel</a>
+                    <button
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors"
+                        type="submit" aria-label="Save item">
+                        Save Item
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="/static/frontend/js/app.js"></script>
+</body>
+
+</html>

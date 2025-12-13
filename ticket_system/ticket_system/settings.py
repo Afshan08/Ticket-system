@@ -58,7 +58,7 @@ ROOT_URLCONF = 'ticket_system.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'ticket_system' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Order</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-800">
+
+    <main id="main-content" class="p-8 transition-all duration-300 min-h-screen ml-0 md:ml-64">
+        <div class="md:hidden mb-4">
+            <button id="mobile-menu-btn" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <div class="max-w-6xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+            <h2 class="text-2xl font-bold mb-6 text-indigo-700 border-b pb-2">Create Job Order</h2>
+
+            <form method="post" id="job-form">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+
+                <!-- Master Section -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Customer Lookup -->
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Customer</label>
+                        <select name="customer" id="id_customer"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300 {% if form.customer.errors %}border-red-500{% endif %}">
+                            <option value="">---------</option>
+                            {% for choice in form.fields.customer.queryset %}
+                            <option value="{{ choice.pk }}" {% if form.customer.value|stringformat:"s" == choice.pk|stringformat:"s" %}selected{% endif %}>
+                                {{ choice.name }}</option>
+                            {% endfor %}
+                        </select>
+                        {% if form.customer.errors %}
+                        <p class="text-red-500 text-xs italic mt-1">{{ form.customer.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Order Date</label>
+                            <input type="date" name="order_date" id="id_order_date"
+                                value="{{ form.order_date.value|date:'Y-m-d' }}"
+                                class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
+                            {% if form.order_date.errors %}
+                            <p class="text-red-500 text-xs italic mt-1">{{ form.order_date.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Due Date</label>
+                            <input type="date" name="due_date" id="id_due_date"
+                                value="{{ form.due_date.value|date:'Y-m-d' }}"
+                                class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
+                            {% if form.due_date.errors %}
+                            <p class="text-red-500 text-xs italic mt-1">{{ form.due_date.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-gray-700 text-sm font-bold">Line Items</label>
+                        <!-- Note: Add Item implementation requires JS to clone formset forms. For MVP, we render fixed forms or use a simple JS helper. Viewing simplest path first. -->
+                    </div>
+
+                    {{ line_formset.management_form }}
+                    {% if line_formset.non_form_errors %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                        {{ line_formset.non_form_errors }}
+                    </div>
+                    {% endif %}
+
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200" id="lines-table">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                                        Item</th>
+                                    <th
+                                        class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider w-24">
+                                        Qty</th>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Notes / Spec</th>
+                                    <th
+                                        class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-16">
+                                        Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="lines-body">
+                                {% for form in line_formset %}
+                                <tr class="line-form">
+                                    {{ form.id }}
+                                    <td class="px-4 py-2">
+                                        {{ form.item }}
+                                        {% if form.item.errors %}
+                                        <p class="text-red-500 text-xs italic">{{ form.item.errors.0 }}</p>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        {{ form.quantity }}
+                                        {% if form.quantity.errors %}
+                                        <p class="text-red-500 text-xs italic">{{ form.quantity.errors.0 }}</p>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-4 py-2">
+                                        {{ form.notes }}
+                                        {% if form.notes.errors %}
+                                        <p class="text-red-500 text-xs italic">{{ form.notes.errors.0 }}</p>
+                                        {% endif %}
+                                    </td>
+                                    <td class="px-4 py-2 text-center">
+                                        {{ form.DELETE }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Priority</label>
+                        <select name="priority" id="id_priority"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
+                            {% for value, label in form.fields.priority.choices %}
+                            <option value="{{ value }}" {% if form.priority.value == value %}selected{% endif %}>{{ label}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Internal Remarks</label>
+                        <textarea name="remarks" id="id_remarks"
+                            class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300"
+                            rows="1">{{ form.remarks.value|default_if_none:'' }}</textarea>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between border-t pt-6">
+                    <a href="{% url 'job_order_list' %}"
+                        class="text-gray-500 hover:text-gray-700 font-medium">Cancel</a>
+                    <button id="save-btn"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline transition-colors shadow-lg transform hover:-translate-y-0.5"
+                        type="submit">
+                        Create Job Order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Simple Script to style formset inputs if needed, or rely on widget attrs -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Basic styling for auto-generated form inputs
+            document.querySelectorAll('input[type="text"], input[type="number"], select, textarea').forEach(el => {
+                if (!el.classList.contains('shadow-sm')) {
+                    el.classList.add('shadow-sm', 'border', 'rounded', 'w-full', 'py-1', 'px-2', 'text-sm', 'text-gray-700', 'border-gray-300');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -78,7 +78,7 @@ class JobOrder(models.Model):
         CANCELLED = 'Cancelled', _('Cancelled')
 
     # Strict Link: One Job per SO (unless we want multiple, but requirement said STRICT link)
-    sales_order = models.ForeignKey(SalesOrder, on_delete=models.CASCADE, related_name='job_orders')
+    sales_order = models.ForeignKey(SalesOrder, on_delete=models.CASCADE, related_name='job_orders', null=True, blank=True)
     
     # Derived from SO usually, but kept for scheduling flexibility
     order_date = models.DateField()
