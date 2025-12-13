@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'ticket_system',
     'setup',
+    'transactions',
     'reports',
     'django.contrib.admin',
     'django.contrib.auth',
