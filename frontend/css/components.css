@@ -1,0 +1,175 @@
+/* Grid System */
+.grid {
+    display: grid;
+    gap: var(--space-6);
+}
+
+.grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1280px) {
+    .grid-cols-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* Cards */
+.card {
+    display: block;
+    padding: var(--space-6);
+    background-color: var(--color-white);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-slate-100);
+    text-decoration: none;
+    transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* Icons within cards */
+.icon-box {
+    padding: var(--space-3);
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.icon-box svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Color Variants for Icons using CSS variables would be ideal, but for specific classes: */
+.icon-blue {
+    background-color: var(--color-blue-50);
+    color: var(--color-blue-600);
+}
+
+.card:hover .icon-blue {
+    background-color: var(--color-blue-100);
+}
+
+.icon-green {
+    background-color: var(--color-green-50);
+    color: var(--color-green-600);
+}
+
+.card:hover .icon-green {
+    background-color: var(--color-green-100);
+}
+
+.icon-purple {
+    background-color: #f3e8ff;
+    color: #9333ea;
+}
+
+.card:hover .icon-purple {
+    background-color: #e9d5ff;
+}
+
+.icon-pink {
+    background-color: #fce7f3;
+    color: #db2777;
+}
+
+.card:hover .icon-pink {
+    background-color: #fbcfe8;
+}
+
+.icon-orange {
+    background-color: var(--color-amber-50);
+    color: var(--color-amber-600);
+}
+
+.card:hover .icon-orange {
+    background-color: var(--color-amber-100);
+}
+
+.icon-teal {
+    background-color: #e0f2f1;
+    color: #00897b;
+}
+
+.card:hover .icon-teal {
+    background-color: #b2dfdb;
+}
+
+.icon-indigo {
+    background-color: var(--color-indigo-50);
+    color: var(--color-indigo-600);
+}
+
+.card:hover .icon-indigo {
+    background-color: var(--color-indigo-100);
+}
+
+.icon-red {
+    background-color: var(--color-red-50);
+    color: var(--color-red-600);
+}
+
+.card:hover .icon-red {
+    background-color: var(--color-red-100);
+}
+
+.icon-amber {
+    background-color: var(--color-amber-50);
+    color: var(--color-amber-600);
+}
+
+.card:hover .icon-amber {
+    background-color: var(--color-amber-100);
+}
+
+.icon-cyan {
+    background-color: #ecfeff;
+    color: #0891b2;
+}
+
+.card:hover .icon-cyan {
+    background-color: #cffafe;
+}
+
+.icon-violet {
+    background-color: #f5f3ff;
+    color: #7c3aed;
+}
+
+.card:hover .icon-violet {
+    background-color: #ede9fe;
+}
+
+/* Buttons in Header (Menu) */
+.btn-icon {
+    color: var(--color-gray-600);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-icon:hover {
+    color: var(--color-indigo-600);
+}
+
+.btn-icon svg {
+    width: 2rem;
+    height: 2rem;
+}

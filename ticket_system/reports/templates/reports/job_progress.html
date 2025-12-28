@@ -1,0 +1,149 @@
+{% extends 'reports/base_reports.html' %}
+{% load humanize %}
+
+{% block title %}Job Progress - Printy{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-800">Job Progress Monitoring</h1>
+        <p class="text-gray-500 mt-1">Real-time status of all production orders</p>
+    </div>
+    <div class="flex gap-2 items-center">
+        {% if filters.job_no or filters.min_progress or filters.start_date %}
+        <span
+            class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold border border-amber-200 animate-pulse">
+            Filters Applied
+        </span>
+        {% endif %}
+        <button onclick="window.location.reload()"
+            class="bg-white border border-gray-300 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-50 shadow-sm transition-all focus:ring-2 focus:ring-indigo-500">
+            Refresh Status
+        </button>
+    </div>
+</header>
+
+{% if data_alert %}
+<div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded-r-xl">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div class="ml-3">
+            <p class="text-sm text-blue-700 font-medium">
+                {{ data_alert }}
+            </p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Filter Section -->
+<div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
+    <form method="GET" class="grid grid-cols-1 md:grid-cols-6 gap-6 items-end">
+        <div class="md:col-span-2">
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Search Job</label>
+            <div class="relative">
+                <input type="text" name="job_no" value="{{ filters.job_no }}" placeholder="Enter Job Number..."
+                    class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+                <svg class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Min Progress %</label>
+            <input type="number" name="min_progress" value="{{ filters.min_progress }}" placeholder="0" min="0"
+                max="100"
+                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Max Progress %</label>
+            <input type="number" name="max_progress" value="{{ filters.max_progress }}" placeholder="100" min="0"
+                max="100"
+                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">From Date</label>
+            <input type="date" name="start_date" value="{{ filters.start_date }}"
+                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+        </div>
+        <div class="flex gap-2">
+            <button type="submit"
+                class="flex-1 bg-indigo-600 text-white font-bold py-2.5 px-4 rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 flex items-center justify-center">
+                Filter
+            </button>
+            <a href="{% url 'job_progress_report' %}"
+                class="bg-gray-100 text-gray-500 py-2.5 px-4 rounded-xl hover:bg-gray-200 transition-all">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Progress List -->
+<div class="flex-1 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col">
+    <div class="overflow-y-auto flex-1 h-full p-0">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50 sticky top-0 z-10">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Job Details</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-1/3">
+                        Stage Progress</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Current Stage</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Est. Completion</th>
+                </tr>
+            </thead>
+            <tbody id="report-body" class="bg-white divide-y divide-gray-200">
+                {% for job in jobs %}
+                <tr class="hover:bg-gray-50 transition-colors {% if job.progress == 100 %}bg-green-50{% endif %}">
+                    <td class="px-6 py-4">
+                        <div class="text-sm font-bold text-gray-900"><a href="{% url 'job_order_report' job.job_no %}"
+                                class="text-indigo-600 hover:underline">{{ job.job_no }}</a></div>
+                        <div class="text-sm text-gray-500">{{ job.item_code }}</div>
+                        <div class="text-xs text-gray-400 mt-1">Qty: {{ job.qty|intcomma }}</div>
+                    </td>
+                    <td class="px-6 py-4 align-middle">
+                        <div class="relative pt-1">
+                            <div class="flex mb-2 items-center justify-between">
+                                <div>
+                                    <span
+                                        class="text-xs font-semibold inline-block text-{{ job.color }}-600">{{job.progress}}%</span>
+                                </div>
+                            </div>
+                            <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-{{ job.color }}-200">
+                                <div style="width:{{ job.progress }}%"
+                                    class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-{{ job.color }}-500 transition-all duration-500">
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-{{ job.color }}-100 text-{{ job.color }}-800">
+                            {{ job.stage }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-500">
+                        {{ job.due_date }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

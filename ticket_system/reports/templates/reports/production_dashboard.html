@@ -1,0 +1,163 @@
+{% extends 'reports/base_reports.html' %}
+{% load humanize %}
+
+{% block title %}Production Dashboard - Printy{% endblock %}
+
+{% block content %}
+<header class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800">Monthly Production Dashboard</h1>
+    <p class="text-gray-500 mt-1">Executive overview for {{ dashboard_month }}</p>
+</header>
+
+<!-- Top KPIs -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <!-- KPI 1 -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-gray-500 font-bold uppercase text-xs">Total Production</h3>
+            <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+            </span>
+        </div>
+        <div class="flex items-baseline">
+            <h2 class="text-3xl font-bold text-gray-800">{{ total_production|floatformat:0|intcomma }}</h2>
+            <span class="text-xs text-gray-500 ml-2">kg</span>
+        </div>
+        <p class="text-green-500 text-sm mt-2 font-medium">↑ 15% vs last month</p>
+    </div>
+
+    <!-- KPI 2 -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-gray-500 font-bold uppercase text-xs">Efficiency Rate</h3>
+            <span class="p-2 bg-green-50 text-green-600 rounded-lg">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </span>
+        </div>
+        <div class="flex items-baseline">
+            <h2 class="text-3xl font-bold text-gray-800">{{ efficiency_rate }}%</h2>
+            <span class="text-xs text-gray-500 ml-2">OEE</span>
+        </div>
+        <p class="text-green-500 text-sm mt-2 font-medium">↑ 2% vs target</p>
+    </div>
+
+    <!-- KPI 3 -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-gray-500 font-bold uppercase text-xs">Waste Ratio</h3>
+            <span class="p-2 bg-red-50 text-red-600 rounded-lg">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </span>
+        </div>
+        <div class="flex items-baseline">
+            <h2 class="text-3xl font-bold text-gray-800">{{ waste_ratio|floatformat:1 }}%</h2>
+            <span class="text-xs text-gray-500 ml-2">Total</span>
+        </div>
+        <p class="text-red-500 text-sm mt-2 font-medium">Target: < 5%</p>
+    </div>
+
+    <!-- KPI 4 -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-gray-500 font-bold uppercase text-xs">Jobs Completed</h3>
+            <span class="p-2 bg-amber-50 text-amber-600 rounded-lg">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </span>
+        </div>
+        <div class="flex items-baseline">
+            <h2 class="text-3xl font-bold text-gray-800">{{ completed_jobs_count }}</h2>
+            <span class="text-xs text-gray-500 ml-2">Jobs</span>
+        </div>
+        <p class="text-gray-400 text-sm mt-2 font-medium">This Month</p>
+    </div>
+</div>
+
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 flex-1">
+    <!-- Chart 1: Output Trend -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-[400px]">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Production Output Trend (Last 7 Days)</h3>
+        <div class="w-full flex-1">
+            <canvas id="prodTrendChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart 2: Waste by Machine -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col min-h-[400px]">
+        <h3 class="text-lg font-bold text-gray-800 mb-4">Waste Distribution by Machine</h3>
+        <div class="w-full flex-1">
+            <canvas id="wasteMachineChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const trendData = JSON.parse('{{ trend_data_json|safe }}');
+        const machineWaste = JSON.parse('{{ machine_waste_json|safe }}');
+
+        // Trend Chart
+        new Chart(document.getElementById('prodTrendChart'), {
+            type: 'line',
+            data: {
+                labels: trendData.labels,
+                datasets: [{
+                    label: 'Production (kg)',
+                    data: trendData.values,
+                    borderColor: '#4f46e5',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Machine Waste Chart
+        new Chart(document.getElementById('wasteMachineChart'), {
+            type: 'bar',
+            data: {
+                labels: machineWaste.labels,
+                datasets: [{
+                    label: 'Waste (kg)',
+                    data: machineWaste.values,
+                    backgroundColor: '#ef4444'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { beginAtZero: true },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

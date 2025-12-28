@@ -1,0 +1,86 @@
+/* Tables */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background-color: var(--color-white);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-gray-200);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    background-color: var(--color-gray-100);
+}
+
+th {
+    padding: var(--space-3) var(--space-4);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-gray-700);
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+tr {
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+tr:last-child {
+    border-bottom: none;
+}
+
+td {
+    padding: var(--space-4);
+    font-size: 0.875rem;
+    color: var(--color-slate-700);
+}
+
+/* Status Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-green {
+    background-color: var(--color-green-100);
+    color: var(--color-green-600);
+}
+
+.badge-yellow {
+    background-color: var(--color-amber-100);
+    color: var(--color-amber-600);
+}
+
+.badge-red {
+    background-color: var(--color-red-100);
+    color: var(--color-red-600);
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 0;
+    }
+
+    .sidebar,
+    .navbar,
+    .no-print {
+        display: none;
+    }
+}

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Reports - Printy{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c7c7c7;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #c7c7c7 #f1f1f1;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="bg-gray-50 text-slate-800 text-sm h-screen flex overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="bg-indigo-900 h-screen flex flex-col transition-all duration-300 w-64 fixed md:relative left-0 top-0 z-50 transform md:translate-x-0 shadow-xl overflow-y-auto custom-scrollbar">
+        <div class="p-6 flex items-center justify-between border-b border-indigo-800/50">
+            <h1 id="app-title" class="font-black text-2xl text-white tracking-tighter">PRINTY <span
+                    class="text-indigo-400">BI</span></h1>
+        </div>
+
+        <nav class="flex-1 py-6 space-y-1">
+            <div
+                class="px-6 mb-4 text-xs font-bold text-indigo-300/50 uppercase tracking-widest sidebar-label font-mono">
+                Operations</div>
+
+            <a href="{% url 'production_dashboard' %}"
+                class="flex items-center px-6 py-3 {% if request.resolver_match.url_name == 'production_dashboard' %}bg-indigo-800 text-white border-l-4 border-indigo-400{% else %}text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white{% endif %} transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span class="font-semibold tracking-tight">Main Dashboard</span>
+            </a>
+
+            <a href="{% url 'job_progress_report' %}"
+                class="flex items-center px-6 py-3 {% if request.resolver_match.url_name == 'job_progress_report' %}bg-indigo-800 text-white border-l-4 border-indigo-400{% else %}text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white{% endif %} transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                <span class="font-semibold tracking-tight">Job Progress</span>
+            </a>
+
+            <a href="{% url 'pending_orders_report' %}"
+                class="flex items-center px-6 py-3 {% if request.resolver_match.url_name == 'pending_orders_report' %}bg-indigo-800 text-white border-l-4 border-indigo-400{% else %}text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white{% endif %} transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-semibold tracking-tight">Pending Orders</span>
+            </a>
+
+            <div
+                class="px-6 mt-8 mb-4 text-xs font-bold text-indigo-300/50 uppercase tracking-widest sidebar-label font-mono">
+                Process Yields</div>
+
+            <a href="{% url 'process_output_report' 'printing' %}"
+                class="flex items-center px-6 py-3 text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                <span class="font-semibold tracking-tight">Printing</span>
+            </a>
+
+            <a href="{% url 'process_output_report' 'lamination' %}"
+                class="flex items-center px-6 py-3 text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <span class="font-semibold tracking-tight">Lamination</span>
+            </a>
+
+            <a href="{% url 'process_output_report' 'rewinding' %}"
+                class="flex items-center px-6 py-3 text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span class="font-semibold tracking-tight">Rewinding</span>
+            </a>
+
+            <a href="{% url 'process_output_report' 'slitting' %}"
+                class="flex items-center px-6 py-3 text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758L5 19m0-14l4.121 4.121" />
+                </svg>
+                <span class="font-semibold tracking-tight">Slitting / QC</span>
+            </a>
+
+            <div
+                class="px-6 mt-8 mb-4 text-xs font-bold text-indigo-300/50 uppercase tracking-widest sidebar-label font-mono">
+                Administration</div>
+
+            <a href="{% url 'production_report' %}"
+                class="flex items-center px-6 py-3 {% if request.resolver_match.url_name == 'production_report' %}bg-indigo-800 text-white border-l-4 border-indigo-400{% else %}text-indigo-100/70 hover:bg-indigo-800/50 hover:text-white{% endif %} transition-all group">
+                <svg class="h-5 w-5 mr-3 flex-shrink-0 group-hover:scale-110 transition-transform" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="font-semibold tracking-tight">Transaction Ledger</span>
+            </a>
+
+            <div class="px-6 pt-10">
+                <a href="/"
+                    class="block w-full text-center py-2 px-4 rounded-lg bg-indigo-500 hover:bg-indigo-400 text-white font-bold transition-all shadow-lg hover:shadow-indigo-500/50">
+                    Exit Reports
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-1 flex flex-col h-full p-8 box-border overflow-y-auto bg-[#F8FAFC]">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

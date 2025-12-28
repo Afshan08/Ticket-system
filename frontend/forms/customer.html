@@ -5,56 +5,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Customers</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/forms.css">
+    <style>
+        .input-group {
+            display: flex;
+        }
+
+        .input-group .form-input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            flex: 1;
+        }
+
+        .input-group .btn {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            background-color: var(--color-gray-200);
+            color: var(--color-gray-700);
+            border: 1px solid var(--color-gray-300);
+            border-left: none;
+        }
+
+        .input-group .btn:hover {
+            background-color: var(--color-gray-300);
+        }
+    </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800">
+<body>
 
-    <main id="main-content" class="p-8 transition-all duration-300 min-h-screen ml-0 md:ml-64">
+    <main id="main-content" class="main-content">
         <div class="md:hidden mb-4">
-            <button id="mobile-menu-btn" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
-                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button id="mobile-menu-btn" class="btn-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
         </div>
-        <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-            <h2 class="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Customer Details</h2>
+        <div class="card max-w-3xl mx-auto">
+            <h2 class="mb-6 border-b pb-2">Customer Details</h2>
 
             <form>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Customer Name</label>
-                    <input type="text"
-                        class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300">
+                <div class="form-group">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" class="form-input">
                 </div>
 
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Contact Info</label>
-                    <input type="text"
-                        class="shadow-sm border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-500 border-gray-300"
-                        placeholder="Phone or Email">
+                <div class="form-group">
+                    <label class="form-label">Contact Info</label>
+                    <input type="text" class="form-input" placeholder="Phone or Email">
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 text-sm font-bold mb-2">Assigned Area</label>
-                    <div class="flex">
-                        <input type="text" id="areaName" readonly
-                            class="shadow-sm border rounded-l w-full py-2 px-3 text-gray-700 leading-tight bg-gray-50 border-gray-300"
+                <div class="form-group mb-6">
+                    <label class="form-label">Assigned Area</label>
+                    <div class="input-group">
+                        <input type="text" id="areaName" readonly class="form-input bg-gray-50"
                             placeholder="Select Area...">
                         <input type="hidden" id="areaId">
-                        <button type="button"
-                            class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded-r border border-l-0 border-gray-300 lookup-btn"
-                            data-table="areas" data-target-id="areaId" data-target-name="areaName">
+                        <button type="button" class="btn lookup-btn" data-table="areas" data-target-id="areaId"
+                            data-target-name="areaName">
                             Search
                         </button>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <a href="../index.html" class="text-gray-500 hover:text-gray-700 font-medium">Cancel</a>
-                    <button
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors"
-                        type="button">
+                <div class="form-actions">
+                    <a href="../index.html" class="btn btn-cancel">Cancel</a>
+                    <button class="btn btn-primary" type="button">
                         Save Customer
                     </button>
                 </div>

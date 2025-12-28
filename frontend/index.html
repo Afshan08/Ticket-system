@@ -5,36 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Printing Productions - Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom Scrollbar for smooth look */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #c7c7c7;
-            border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
-    </style>
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="css/core.css">
+    <link rel="stylesheet" href="css/components.css">
 </head>
 
-<body class="bg-slate-50 text-slate-800">
+<body>
 
-    <main id="main-content" class="transition-all duration-300 min-h-screen ml-0 md:ml-64">
+    <main id="main-content" class="main-content">
         <!-- Top Header Padded for Content -->
-        <div class="p-8">
+        <div class="container p-8">
             <div class="md:hidden mb-4">
-                <button id="mobile-menu-btn" class="text-gray-600 hover:text-indigo-600 focus:outline-none">
-                    <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="mobile-menu-btn" class="btn-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
@@ -42,119 +25,110 @@
             </div>
 
             <header class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">Production Dashboard</h1>
-                <p class="text-gray-500 mt-2">Manage your printing workflows and master data</p>
+                <h1>Production Dashboard</h1>
+                <p class="mt-2">Manage your printing workflows and master data</p>
             </header>
 
             <!-- Master Data Grid -->
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Master Data</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-10">
+            <h2>Master Data</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
                 <!-- Card: Area -->
-                <a href="forms/area.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/area.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-blue">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Areas</h3>
-                            <p class="text-sm text-gray-500">Manage shop floor sections</p>
+                            <h3>Areas</h3>
+                            <p class="text-sm">Manage shop floor sections</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Customer -->
-                <a href="forms/customer.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/customer.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div
-                            class="p-3 bg-green-50 text-green-600 rounded-lg group-hover:bg-green-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-green">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Customers</h3>
-                            <p class="text-sm text-gray-500">Client details & contacts</p>
+                            <h3>Customers</h3>
+                            <p class="text-sm">Client details & contacts</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Items -->
-                <a href="forms/item.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/item.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div
-                            class="p-3 bg-purple-50 text-purple-600 rounded-lg group-hover:bg-purple-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-purple">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Items/Products</h3>
-                            <p class="text-sm text-gray-500">Manage producable items</p>
+                            <h3>Items/Products</h3>
+                            <p class="text-sm">Manage producable items</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Item Categories -->
-                <a href="forms/item_category.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/item_category.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 bg-pink-50 text-pink-600 rounded-lg group-hover:bg-pink-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-pink">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Item Categories</h3>
-                            <p class="text-sm text-gray-500">Classify your products</p>
+                            <h3>Item Categories</h3>
+                            <p class="text-sm">Classify your products</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Machines -->
-                <a href="forms/machine.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/machine.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div
-                            class="p-3 bg-orange-50 text-orange-600 rounded-lg group-hover:bg-orange-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-orange">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Machines</h3>
-                            <p class="text-sm text-gray-500">Equipment Setup</p>
+                            <h3>Machines</h3>
+                            <p class="text-sm">Equipment Setup</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Operators -->
-                <a href="forms/operator.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/operator.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 bg-teal-50 text-teal-600 rounded-lg group-hover:bg-teal-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-teal">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Operators</h3>
-                            <p class="text-sm text-gray-500">Staff Management</p>
+                            <h3>Operators</h3>
+                            <p class="text-sm">Staff Management</p>
                         </div>
                     </div>
                 </a>
@@ -162,183 +136,167 @@
 
 
             <!-- Transactions Grid -->
-            <h2 class="text-xl font-semibold mb-4 text-gray-700">Production Transactions</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <h2>Production Transactions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-8">
 
                 <!-- Card: Job Order -->
-                <a href="forms/job.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/job.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div
-                            class="p-3 bg-indigo-50 text-indigo-600 rounded-lg group-hover:bg-indigo-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-indigo">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Job Order</h3>
-                            <p class="text-sm text-gray-500">Create new production jobs</p>
+                            <h3>Job Order</h3>
+                            <p class="text-sm">Create new production jobs</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Print -->
-                <a href="forms/transaction.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/transaction.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 bg-red-50 text-red-600 rounded-lg group-hover:bg-red-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-red">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Printing</h3>
-                            <p class="text-sm text-gray-500">Record printing output</p>
+                            <h3>Printing</h3>
+                            <p class="text-sm">Record printing output</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Rewinding -->
-                <a href="forms/rewinding.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/rewinding.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div
-                            class="p-3 bg-amber-50 text-amber-600 rounded-lg group-hover:bg-amber-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-amber">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Rewinding</h3>
-                            <p class="text-sm text-gray-500">Roll rewinding details</p>
+                            <h3>Rewinding</h3>
+                            <p class="text-sm">Roll rewinding details</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Lamination -->
-                <a href="forms/laminating.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/laminating.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div class="p-3 bg-cyan-50 text-cyan-600 rounded-lg group-hover:bg-cyan-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-cyan">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Lamination</h3>
-                            <p class="text-sm text-gray-500">Film lamination stats</p>
+                            <h3>Lamination</h3>
+                            <p class="text-sm">Film lamination stats</p>
                         </div>
                     </div>
                 </a>
 
                 <!-- Card: Slitting -->
-                <a href="forms/sliting.html"
-                    class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
+                <a href="forms/sliting.html" class="card group">
                     <div class="flex items-center space-x-4">
-                        <div
-                            class="p-3 bg-violet-50 text-violet-600 rounded-lg group-hover:bg-violet-100 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="icon-box icon-violet">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879M12 12L9.121 9.121m0 5.758a3 3 0 10-4.243 4.243 3 3 0 004.243-4.243zm0-5.758a3 3 0 10-4.243-4.243 3 3 0 004.243 4.243z">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            <h3 class="font-semibold text-gray-800">Slitting</h3>
-                            <p class="text-sm text-gray-500">Final cut processing</p>
+                            <h3>Slitting</h3>
+                            <p class="text-sm">Final cut processing</p>
                         </div>
                     </div>
                 </a>
             </div>
 
-        </div>
+            <!-- Production Reports Grid -->
+            <h2>Production Reports</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
-        <!-- Production Reports Grid -->
-        <h2 class="text-xl font-semibold mb-4 mt-8 text-gray-700">Production Reports</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Card: Dashboard -->
+                <a href="reports/production_dashboard.html" class="card group">
+                    <div class="flex items-center space-x-4">
+                        <div class="icon-box icon-indigo">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2 2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>Production Dashboard</h3>
+                            <p class="text-sm">Executive Overview</p>
+                        </div>
+                    </div>
+                </a>
 
-            <!-- Card: Dashboard -->
-            <a href="reports/production_dashboard.html"
-                class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
-                <div class="flex items-center space-x-4">
-                    <div
-                        class="p-3 bg-indigo-50 text-indigo-600 rounded-lg group-hover:bg-indigo-100 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                            </path>
-                        </svg>
+                <!-- Card: Pending Orders -->
+                <a href="reports/pending_orders.html" class="card group">
+                    <div class="flex items-center space-x-4">
+                        <div class="icon-box icon-blue">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>Pending Orders</h3>
+                            <p class="text-sm">Queue & Deadlines</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-800">Production Dashboard</h3>
-                        <p class="text-sm text-gray-500">Executive Overview</p>
-                    </div>
-                </div>
-            </a>
+                </a>
 
-            <!-- Card: Pending Orders -->
-            <a href="reports/pending_orders.html"
-                class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
-                <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-100 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
+                <!-- Card: Job Progress -->
+                <a href="reports/job_progress.html" class="card group">
+                    <div class="flex items-center space-x-4">
+                        <div class="icon-box icon-teal">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>Job Progress</h3>
+                            <p class="text-sm">Track Live Jobs</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-800">Pending Orders</h3>
-                        <p class="text-sm text-gray-500">Queue & Deadlines</p>
-                    </div>
-                </div>
-            </a>
+                </a>
 
-            <!-- Card: Job Progress -->
-            <a href="reports/job_progress.html"
-                class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
-                <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-teal-50 text-teal-600 rounded-lg group-hover:bg-teal-100 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                            </path>
-                        </svg>
+                <!-- Card: Print Output -->
+                <a href="reports/print_output.html" class="card group">
+                    <div class="flex items-center space-x-4">
+                        <div class="icon-box icon-red">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>Print Output</h3>
+                            <p class="text-sm">Yield & Waste</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-800">Job Progress</h3>
-                        <p class="text-sm text-gray-500">Track Live Jobs</p>
-                    </div>
-                </div>
-            </a>
+                </a>
 
-            <!-- Card: Print Output -->
-            <a href="reports/print_output.html"
-                class="block p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 group">
-                <div class="flex items-center space-x-4">
-                    <div class="p-3 bg-red-50 text-red-600 rounded-lg group-hover:bg-red-100 transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
-                            </path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-800">Print Output</h3>
-                        <p class="text-sm text-gray-500">Yield & Waste</p>
-                    </div>
-                </div>
-            </a>
-
-
-
+            </div>
         </div>
     </main>
     <!-- Scripts -->

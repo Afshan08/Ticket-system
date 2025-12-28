@@ -8,6 +8,7 @@ class Area(models.Model):
         INACTIVE = 'inactive', _('Inactive')
         MAINTENANCE = 'maintenance', _('Under Maintenance')
 
+    code = models.CharField(max_length=20, unique=True, editable=False)
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
     status = models.CharField(
@@ -26,7 +27,7 @@ class Area(models.Model):
         ordering = ['name']
     
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.code})"
 
     def clean(self):
         if self.status == self.Status.INACTIVE:
@@ -37,6 +38,18 @@ class Area(models.Model):
                  raise ValidationError(_("Cannot deactivate Area with active customers."))
 
     def save(self, *args, **kwargs):
+        if not self.code:
+            last_area = Area.objects.all().order_by('id').last()
+            if last_area and last_area.code:
+                try:
+                    last_id = int(last_area.code.split('-')[1])
+                    new_id = last_id + 1
+                except (IndexError, ValueError):
+                    new_id = 1
+            else:
+                new_id = 1
+            self.code = f"AR-{new_id:03d}"
+            
         self.clean()
         super().save(*args, **kwargs)
 

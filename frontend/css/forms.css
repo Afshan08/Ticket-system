@@ -1,0 +1,101 @@
+/* Forms */
+.form-group {
+    margin-bottom: var(--space-4);
+}
+
+.form-label {
+    display: block;
+    color: var(--color-gray-700);
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    display: block;
+    width: 100%;
+    padding: var(--space-2) var(--space-3);
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--color-gray-700);
+    background-color: var(--color-white);
+    background-clip: padding-box;
+    border: 1px solid var(--color-gray-300);
+    border-radius: 0.25rem;
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--color-indigo-500);
+    box-shadow: 0 0 0 2px var(--color-indigo-100);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    padding: var(--space-2) var(--space-4);
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    color: var(--color-white);
+    background-color: var(--color-indigo-600);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-indigo-700);
+}
+
+.btn-cancel {
+    background: none;
+    color: var(--color-gray-500);
+    font-weight: 500;
+}
+
+.btn-cancel:hover {
+    color: var(--color-gray-700);
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+
+    /* Input Group */
+    .input-group {
+        display: flex;
+    }
+
+    .input-group .form-input {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        flex: 1;
+    }
+
+    .input-group .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        background-color: var(--color-gray-200);
+        color: var(--color-gray-700);
+        border: 1px solid var(--color-gray-300);
+        border-left: none;
+    }
+
+    .input-group .btn:hover {
+        background-color: var(--color-gray-300);
+    }

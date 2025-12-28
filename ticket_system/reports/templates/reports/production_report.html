@@ -1,0 +1,214 @@
+{% extends 'reports/base_reports.html' %}
+{% load humanize %}
+
+{% block title %}Daily Transaction Ledger - Printy{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<header class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Daily Transaction Ledger</h1>
+        <p class="text-gray-500 mt-1">Detailed production and transaction history across all processes</p>
+    </div>
+    <div class="flex gap-2">
+        <button onclick="window.print()"
+            class="bg-white border border-gray-200 px-4 py-2.5 rounded-xl text-gray-600 hover:bg-gray-50 shadow-sm transition-all flex items-center gap-2">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+            </svg>
+            Print View
+        </button>
+    </div>
+</header>
+
+<!-- Filter Section -->
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 no-print">
+    <form method="get" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Start Date</label>
+                <div class="relative">
+                    <input type="date" name="start_date" value="{{ form.start_date.value|date:'Y-m-d' }}"
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">End Date</label>
+                <div class="relative">
+                    <input type="date" name="end_date" value="{{ form.end_date.value|date:'Y-m-d' }}"
+                        class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Report Type</label>
+                <select name="report_type"
+                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+                    {% for val, label in form.fields.report_type.choices %}
+                    <option value="{{ val }}" {% if form.report_type.value == val %}selected{% endif %}>{{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Job Number</label>
+                <input type="text" name="job_no" value="{{ form.job_no.value|default:'' }}"
+                    placeholder="Optional Job No"
+                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
+            </div>
+        </div>
+
+        <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase mb-3 tracking-widest">Select Processes</label>
+            <div class="flex flex-wrap gap-4">
+                {% for checkbox in form.processes %}
+                <label
+                    class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-indigo-50 hover:border-indigo-200 transition-all group">
+                    {{ checkbox.tag }}
+                    <span class="text-sm font-semibold text-gray-600 group-hover:text-indigo-600">{{checkbox.choice_label }}</span>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3 pt-4 border-t border-gray-50">
+            <button type="submit"
+                class="bg-indigo-600 text-white font-bold py-2.5 px-8 rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 flex items-center gap-2">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Generate Report
+            </button>
+            <button type="submit" name="format" value="pdf"
+                class="bg-emerald-600 text-white font-bold py-2.5 px-8 rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 flex items-center gap-2">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Download PDF
+            </button>
+            <a href="?"
+                class="bg-gray-100 text-gray-500 font-bold py-2.5 px-6 rounded-xl hover:bg-gray-200 transition-all flex items-center gap-2">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                Reset Filters
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Report Output -->
+{% if report_data %}
+{% for process in report_data %}
+<div class="mb-12">
+    <!-- Process Header -->
+    <div class="bg-indigo-900 text-white p-4 rounded-t-2xl flex items-center justify-between shadow-lg">
+        <h2 class="text-xl font-black uppercase tracking-widest">{{ process.name }} PRODUCTION</h2>
+        <div class="flex gap-6 text-xs font-mono">
+            <div class="flex flex-col"><span class="text-indigo-300">Total Qty</span><span class="text-lg font-bold">{{ process.total_kg|floatformat:1 }} kg</span></div>
+            <div class="flex flex-col"><span class="text-indigo-300">Total Meters</span><span
+                    class="text-lg font-bold">{{ process.total_meters|floatformat:0 }} m</span></div>
+            <div class="flex flex-col border-l border-indigo-700 pl-6"><span class="text-indigo-300">Wastage
+                    %</span><span class="text-lg font-bold text-amber-400">{{ process.wastage_pct|floatformat:1}}%</span></div>
+        </div>
+    </div>
+
+    {% for machine in process.machines %}
+    <div class="bg-white border-x border-gray-100 last:border-b last:rounded-b-2xl mb-1 overflow-hidden">
+        <div class="bg-indigo-50/50 px-6 py-3 border-b border-indigo-100 flex items-center justify-between">
+            <h3 class="font-bold text-indigo-900 uppercase tracking-wider text-sm">{{ machine.name }}</h3>
+            <div class="text-xs text-indigo-600 font-semibold bg-indigo-100/50 px-3 py-1 rounded-full">
+                Efficiency Avg: {{ machine.avg_speed|floatformat:0 }} m/min
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-xs text-left">
+                <thead class="bg-gray-50/50 text-gray-500 font-bold uppercase tracking-tighter">
+                    <tr>
+                        <th class="px-6 py-3">Date</th>
+                        <th class="px-6 py-3">Job No</th>
+                        <th class="px-6 py-3 text-right">Production (Kg)</th>
+                        <th class="px-6 py-3 text-right">Meters</th>
+                        <th class="px-6 py-3 text-right">Wastage (Kg)</th>
+                        <th class="px-6 py-3 text-right">Minutes</th>
+                        <th class="px-6 py-3 text-right">Speed</th>
+                        <th class="px-6 py-3">Operator</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for date_node in machine.dates %}
+                    {% for row in date_node.rows %}
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-6 py-3 font-medium text-gray-400">{{ row.trans_date|date:"d-M-y" }}</td>
+                        <td class="px-6 py-3 font-bold text-gray-900">{{ row.job_no }}</td>
+                        <td class="px-6 py-3 text-right font-semibold">{{ row.final_farword_wt|default:0|floatformat:1}}</td>
+                        <td class="px-6 py-3 text-right text-gray-600 font-mono">{{ row.meters|default:0|floatformat:0}}</td>
+                        <td class="px-6 py-3 text-right text-red-500">{{ row.wastage|default:0|floatformat:1 }}</td>
+                        <td class="px-6 py-3 text-right">{{ row.total_production_minute|default:0|floatformat:0 }}</td>
+                        <td class="px-6 py-3 text-right font-bold text-indigo-600">{{ row.average_speed|default:0|floatformat:0 }}</td>
+                        <td class="px-6 py-3 text-gray-500 italic">{{ row.machine_operator }}</td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Date Subtotal -->
+                    <tr class="bg-indigo-50/30 font-bold text-indigo-900 border-t border-indigo-100">
+                        <td colspan="2" class="px-6 py-2 text-right">Subtotal ({{ date_node.date|date:"d-M" }})</td>
+                        <td class="px-6 py-2 text-right">{{ date_node.sum_kg|floatformat:1 }}</td>
+                        <td class="px-6 py-2 text-right">{{ date_node.sum_meters|floatformat:0 }}</td>
+                        <td class="px-6 py-2 text-right">{{ date_node.sum_wastage|floatformat:1 }}</td>
+                        <td class="px-6 py-2 text-right">-</td>
+                        <td class="px-6 py-2 text-right">{{ date_node.avg_speed|floatformat:0 }}</td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                    <!-- Machine Total -->
+                    <tr class="bg-indigo-100/50 font-black text-indigo-900 border-t-2 border-indigo-200">
+                        <td colspan="2" class="px-6 py-4 text-right uppercase tracking-widest text-xs">Total Machine {{machine.name }}</td>
+                        <td class="px-6 py-4 text-right text-sm underline">{{ machine.total_kg|floatformat:1 }}</td>
+                        <td class="px-6 py-4 text-right text-sm">{{ machine.total_meters|floatformat:0 }}</td>
+                        <td class="px-6 py-4 text-right text-sm">{{ machine.total_wastage|floatformat:1 }}</td>
+                        <td class="px-6 py-4 text-right text-sm">{{ machine.total_minutes|floatformat:0 }}</td>
+                        <td class="px-6 py-4 text-right text-sm text-emerald-600">{{ machine.avg_speed|floatformat:0 }}
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
+{% elif request.GET %}
+<div
+    class="bg-amber-50 border-l-4 border-amber-400 p-8 rounded-2xl flex flex-col items-center justify-center text-center">
+    <svg class="h-16 w-16 text-amber-200 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+    <h3 class="text-xl font-bold text-amber-900">No Records Found</h3>
+    <p class="text-amber-700 mt-2 max-w-md">We couldn't find any production transactions matching your current filter
+        criteria. Try expanding your date range or selecting more processes.</p>
+    <a href="?"
+        class="mt-6 bg-white border border-amber-200 px-6 py-2 rounded-xl text-amber-700 font-bold hover:bg-amber-100 transition-all">Clear
+        Filters</a>
+</div>
+{% else %}
+<div
+    class="bg-indigo-50/50 border-2 border-dashed border-indigo-100 p-16 rounded-3xl flex flex-col items-center justify-center text-center">
+    <div class="bg-white p-6 rounded-full shadow-xl shadow-indigo-100 mb-6">
+        <svg class="h-12 w-12 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+    </div>
+    <h3 class="text-2xl font-black text-indigo-900 tracking-tight">Ready to Analyze?</h3>
+    <p class="text-indigo-600/70 mt-3 max-w-sm font-medium">Select your date range and processes above to generate a
+        comprehensive production ledger.</p>
+</div>
+{% endif %}
+
+{% endblock %}

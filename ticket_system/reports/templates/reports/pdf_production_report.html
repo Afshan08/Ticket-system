@@ -1,0 +1,252 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Production Report</title>
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0.3cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 6pt;
+            color: #000;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .company-name {
+            font-size: 14pt;
+            font-weight: bold;
+        }
+
+        .report-title {
+            font-size: 10pt;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+
+        .date-range {
+            font-size: 8pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            border: 0.5pt solid #000;
+        }
+
+        th,
+        td {
+            border: 0.5pt solid #000;
+            padding: 1px 2px;
+            vertical-align: middle;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #fff;
+            font-size: 5pt;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        td {
+            font-size: 5.5pt;
+            text-align: right;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .process-title {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #1a237e;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .machine-title {
+            font-size: 7pt;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-top: 5px;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+
+        .total-row {
+            font-weight: bold;
+        }
+
+        .remarks-row td {
+            font-style: italic;
+            color: #444;
+            font-size: 5pt;
+            text-align: left;
+            border-top: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="company-name">ABC COMPANY (Pvt.) Ltd.</div>
+        <div class="report-title">Daily Production Report (Summary)</div>
+        <div class="date-range">From {{ start_date|date:"d/m/Y" }} To {{ end_date|date:"d/m/Y" }}</div>
+    </div>
+
+    {% for process in report_data %}
+    <div class="process-title">{{ process.name }}</div>
+
+    {% for machine in process.machines %}
+    <div class="machine-title">{{ machine.name }}</div>
+    <table>
+        <colgroup>
+            <col style="width: 2.5%;"> <!-- S.No. -->
+            <col style="width: 4.5%;"> <!-- Job No. -->
+            <col style="width: 3.5%;"> <!-- File No. -->
+            <col style="width: 5.5%;"> <!-- Date -->
+            <col style="width: 4.5%;"> <!-- Doc No. -->
+            <col style="width: 12.5%;"> <!-- Job Name -->
+            <col style="width: 3.5%;"> <!-- Type -->
+            <col style="width: 8%;"> <!-- Material -->
+            <col style="width: 5%;"> <!-- Prod Qty -->
+            <col style="width: 4.5%;"> <!-- Total Wst -->
+            <col style="width: 4.5%;"> <!-- B/L QTY -->
+            <col style="width: 6.5%;"> <!-- Meters -->
+            <col style="width: 5%;"> <!-- M/C Speed -->
+            <col style="width: 5%;"> <!-- M/C Start -->
+            <col style="width: 5%;"> <!-- M/C End -->
+            <col style="width: 5.5%;"> <!-- TS Mint -->
+            <col style="width: 6.5%;"> <!-- Prod Mint -->
+            <col style="width: 4.5%;"> <!-- Wst % -->
+            <col style="width: 4.5%;"> <!-- Average -->
+        </colgroup>
+        <thead>
+            <tr>
+                <th width="2.5%">S.No.</th>
+                <th width="4.5%">Job No.</th>
+                <th width="3.5%">File No.</th>
+                <th width="5.5%">Date</th>
+                <th width="4.5%">Doc. No</th>
+                <th width="12.5%">Job Name</th>
+                <th width="3.5%">Type</th>
+                <th width="8%">Material / Alt</th>
+                <th width="5%">Prod Qty</th>
+                <th width="4.5%">Wst</th>
+                <th width="4.5%">B/L</th>
+                <th width="6.5%">Meters</th>
+                <th width="5%">Speed</th>
+                <th width="5%">Start</th>
+                <th width="5%">End</th>
+                <th width="5.5%">TS (m)</th>
+                <th width="6.5%">Total (m)</th>
+                <th width="4.5%">W%</th>
+                <th width="4.5%">Avg</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for date_node in machine.dates %}
+            {% for row in date_node.rows %}
+            <tr>
+                <td class="text-center">{{ forloop.parentloop.parentloop.parentloop.counter }}.{{ forloop.counter }}
+                </td>
+                <td class="text-left font-bold">{{ row.job_no }}</td>
+                <td class="text-left">{{ row.printing_file_no|default:"" }}</td>
+                <td class="text-center">{{ row.trans_date|date:"d-M-Y" }}</td>
+                <td class="text-left">{{ row.trans_number|slice:"-8:" }}</td>
+                <td class="text-left">{{ row.printing_mtitle|default:row.product_code|truncatechars:35 }}</td>
+                <td class="text-center">{{ row.trans_type }}</td>
+                <td class="text-left">{{ row.product_code|default:""|truncatechars:25 }}</td>
+                <td>{{ row.final_farword_wt|floatformat:2 }}</td>
+                <td>{{ row.wastage|floatformat:2 }}</td>
+                <td>{{ row.txt_balance_qty|default:"0.00"|floatformat:2 }}</td>
+                <td class="font-bold">{{ row.meters|floatformat:1|intcomma }}</td>
+                <td>{{ row.speed|floatformat:1 }}</td>
+                <td class="text-center">{{ row.start_time|default:"00:00" }}</td>
+                <td class="text-center">{{ row.end_time|default:"00:00" }}</td>
+                <td>{{ row.mc_trouble_shooting_mint|floatformat:1 }}</td>
+                <td>{{ row.total_production_minute|floatformat:1 }}</td>
+                <td>{{ row.wastage_pct|floatformat:2 }}</td>
+                <td class="font-bold">{{ row.average_speed|floatformat:1 }}</td>
+            </tr>
+            {% if row.remarks %}
+            <tr class="remarks-row">
+                <td colspan="2"></td>
+                <td colspan="17">Remarks: {{ row.remarks }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            <tr class="total-row"
+                style="background-color: #eef2ff; border-top: 1.5pt solid #312e81; border-bottom: 1pt solid #312e81; font-weight: bold;">
+                <td colspan="8" class="text-right" style="font-size: 7pt; color: #1e1b4b; padding-top: 5px;">Total {{date_node.date|date:"d-M-Y" }}</td>
+                <td style="font-size: 6.5pt;">{{ date_node.sum_kg|floatformat:2 }}</td>
+                <td style="font-size: 6.5pt;">{{ date_node.sum_wastage|floatformat:2 }}</td>
+                <td style="font-size: 6.5pt;">{{ date_node.sum_bl|floatformat:2 }}</td>
+                <td style="font-size: 6.5pt; color: #1e1b4b;">{{ date_node.sum_meters|floatformat:0|intcomma }}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td style="font-size: 6.5pt;">{{ date_node.sum_trouble_shooting|floatformat:1 }}</td>
+                <td style="font-size: 6.5pt;">{{ date_node.sum_minutes|floatformat:1 }}</td>
+                <td style="font-size: 6.5pt; color: #b91c1c;">{{ date_node.wastage_pct|floatformat:2 }}</td>
+                <td style="font-size: 7pt; color: #312e81;">{{ date_node.avg_speed|floatformat:1 }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row" style="background-color: #eee;">
+                <td colspan="8" class="text-right">Total {{ machine.name }}</td>
+                <td>{{ machine.total_kg|floatformat:2 }}</td>
+                <td>{{ machine.total_wastage|floatformat:2 }}</td>
+                <td>{{ machine.total_bl|floatformat:2 }}</td>
+                <td class="font-bold">{{ machine.total_meters|floatformat:0|intcomma }}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>{{ machine.total_minutes|floatformat:1 }}</td>
+                <td>{{ machine.wastage_pct|floatformat:2 }}</td>
+                <td class="font-bold">{{ machine.avg_speed|floatformat:1 }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+    <br>
+    <div style="text-align: right;">
+        <table style="width: 50%; border: 0.5pt solid #000;" align="right">
+            <tr class="total-row" style="background-color: #f1f5f9;">
+                <td class="text-center" style="padding: 2px;">SUMMARY: {{ process.name|upper }}</td>
+                <td style="padding: 2px;">Qty: {{ process.total_kg|floatformat:2 }} kg</td>
+                <td style="padding: 2px;">Meters: {{ process.total_meters|floatformat:0|intcomma }} m</td>
+                <td style="padding: 2px;">BL: {{ process.total_bl|floatformat:2 }}</td>
+                <td style="padding: 2px;">W%: {{ process.wastage_pct|floatformat:2 }}%</td>
+            </tr>
+        </table>
+    </div>
+    <div style="clear: both;"></div>
+    {% endfor %}
+</body>
+
+</html>
