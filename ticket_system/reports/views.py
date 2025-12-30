@@ -87,6 +87,15 @@ def production_report_view(request):
         if form.cleaned_data.get('job_no'):
             queryset = queryset.filter(job_no__icontains=form.cleaned_data['job_no'])
 
+        # Build Job -> Product Name mapping
+        job_nos = queryset.values_list('job_no', flat=True).distinct()
+        job_map = SLJobMaster.objects.filter(job_no__in=job_nos).values('job_no', 'item_code')
+        item_codes = [j['item_code'] for j in job_map if j['item_code']]
+        items = SLItem.objects.filter(item_code__in=item_codes).values('item_code', 'item')
+        
+        item_map_dict = {i['item_code']: i['item'] for i in items}
+        job_to_item_dict = {j['job_no']: item_map_dict.get(j['item_code'], "Unknown Product") for j in job_map}
+
         # Aggregation Logic
         # Structure: Process -> Machine -> Date -> [Rows]
         grouped_data = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
@@ -95,6 +104,10 @@ def production_report_view(request):
             p_name = get_process_name(row.trans_type)
             m_name = row.machine_code or "Unknown Machine"
             d_date = row.trans_date
+            
+            # Attach product name to row
+            row.product_name = job_to_item_dict.get(row.job_no, row.printing_mtitle or "Unknown Product")
+            
             grouped_data[p_name][m_name][d_date].append(row)
 
         # Process the grouped data into a render-friendly format with Totals

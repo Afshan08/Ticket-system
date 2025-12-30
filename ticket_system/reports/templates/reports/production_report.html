@@ -45,7 +45,7 @@
                 <select name="report_type"
                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
                     {% for val, label in form.fields.report_type.choices %}
-                    <option value="{{ val }}" {% if form.report_type.value == val %}selected{% endif %}>{{ label }}
+                    <option value="{{ val }}" {% if form.report_type.value==val %}selected{% endif %}>{{ label }}
                     </option>
                     {% endfor %}
                 </select>
@@ -65,7 +65,9 @@
                 <label
                     class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-indigo-50 hover:border-indigo-200 transition-all group">
                     {{ checkbox.tag }}
-                    <span class="text-sm font-semibold text-gray-600 group-hover:text-indigo-600">{{checkbox.choice_label }}</span>
+                    <span
+                        class="text-sm font-semibold text-gray-600 group-hover:text-indigo-600">{{checkbox.choice_label
+                        }}</span>
                 </label>
                 {% endfor %}
             </div>
@@ -108,11 +110,13 @@
     <div class="bg-indigo-900 text-white p-4 rounded-t-2xl flex items-center justify-between shadow-lg">
         <h2 class="text-xl font-black uppercase tracking-widest">{{ process.name }} PRODUCTION</h2>
         <div class="flex gap-6 text-xs font-mono">
-            <div class="flex flex-col"><span class="text-indigo-300">Total Qty</span><span class="text-lg font-bold">{{ process.total_kg|floatformat:1 }} kg</span></div>
+            <div class="flex flex-col"><span class="text-indigo-300">Total Qty</span><span class="text-lg font-bold">{{
+                    process.total_kg|floatformat:1 }} kg</span></div>
             <div class="flex flex-col"><span class="text-indigo-300">Total Meters</span><span
                     class="text-lg font-bold">{{ process.total_meters|floatformat:0 }} m</span></div>
             <div class="flex flex-col border-l border-indigo-700 pl-6"><span class="text-indigo-300">Wastage
-                    %</span><span class="text-lg font-bold text-amber-400">{{ process.wastage_pct|floatformat:1}}%</span></div>
+                    %</span><span class="text-lg font-bold text-amber-400">{{
+                    process.wastage_pct|floatformat:1}}%</span></div>
         </div>
     </div>
 
@@ -131,6 +135,7 @@
                     <tr>
                         <th class="px-6 py-3">Date</th>
                         <th class="px-6 py-3">Job No</th>
+                        <th class="px-6 py-3">Product Name</th>
                         <th class="px-6 py-3 text-right">Production (Kg)</th>
                         <th class="px-6 py-3 text-right">Meters</th>
                         <th class="px-6 py-3 text-right">Wastage (Kg)</th>
@@ -145,17 +150,21 @@
                     <tr class="hover:bg-gray-50/50 transition-colors">
                         <td class="px-6 py-3 font-medium text-gray-400">{{ row.trans_date|date:"d-M-y" }}</td>
                         <td class="px-6 py-3 font-bold text-gray-900">{{ row.job_no }}</td>
-                        <td class="px-6 py-3 text-right font-semibold">{{ row.final_farword_wt|default:0|floatformat:1}}</td>
-                        <td class="px-6 py-3 text-right text-gray-600 font-mono">{{ row.meters|default:0|floatformat:0}}</td>
+                        <td class="px-6 py-3 text-gray-600 text-sm">{{ row.product_name }}</td>
+                        <td class="px-6 py-3 text-right font-semibold">{{ row.final_farword_wt|default:0|floatformat:1}}
+                        </td>
+                        <td class="px-6 py-3 text-right text-gray-600 font-mono">{{ row.meters|default:0|floatformat:0}}
+                        </td>
                         <td class="px-6 py-3 text-right text-red-500">{{ row.wastage|default:0|floatformat:1 }}</td>
                         <td class="px-6 py-3 text-right">{{ row.total_production_minute|default:0|floatformat:0 }}</td>
-                        <td class="px-6 py-3 text-right font-bold text-indigo-600">{{ row.average_speed|default:0|floatformat:0 }}</td>
+                        <td class="px-6 py-3 text-right font-bold text-indigo-600">{{
+                            row.average_speed|default:0|floatformat:0 }}</td>
                         <td class="px-6 py-3 text-gray-500 italic">{{ row.machine_operator }}</td>
                     </tr>
                     {% endfor %}
                     <!-- Date Subtotal -->
                     <tr class="bg-indigo-50/30 font-bold text-indigo-900 border-t border-indigo-100">
-                        <td colspan="2" class="px-6 py-2 text-right">Subtotal ({{ date_node.date|date:"d-M" }})</td>
+                        <td colspan="3" class="px-6 py-2 text-right">Subtotal ({{ date_node.date|date:"d-M" }})</td>
                         <td class="px-6 py-2 text-right">{{ date_node.sum_kg|floatformat:1 }}</td>
                         <td class="px-6 py-2 text-right">{{ date_node.sum_meters|floatformat:0 }}</td>
                         <td class="px-6 py-2 text-right">{{ date_node.sum_wastage|floatformat:1 }}</td>
@@ -166,7 +175,8 @@
                     {% endfor %}
                     <!-- Machine Total -->
                     <tr class="bg-indigo-100/50 font-black text-indigo-900 border-t-2 border-indigo-200">
-                        <td colspan="2" class="px-6 py-4 text-right uppercase tracking-widest text-xs">Total Machine {{machine.name }}</td>
+                        <td colspan="3" class="px-6 py-4 text-right uppercase tracking-widest text-xs">Total Machine
+                            {{machine.name }}</td>
                         <td class="px-6 py-4 text-right text-sm underline">{{ machine.total_kg|floatformat:1 }}</td>
                         <td class="px-6 py-4 text-right text-sm">{{ machine.total_meters|floatformat:0 }}</td>
                         <td class="px-6 py-4 text-right text-sm">{{ machine.total_wastage|floatformat:1 }}</td>
