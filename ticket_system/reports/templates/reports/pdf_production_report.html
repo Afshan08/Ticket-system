@@ -48,7 +48,7 @@
 
         th,
         td {
-            border: 0.1pt solid #ddd;
+            border: 0.1pt solid #000000;
             padding: 2pt 1pt;
             vertical-align: middle;
             overflow: hidden;
@@ -98,7 +98,7 @@
         }
 
         .total-row {
-            font-weight: bold;
+            /* font-weight: bold; - Removed as per user request */
         }
 
         .remarks-row td {
@@ -170,22 +170,22 @@
             <tr>
                 <td class="text-center">{{ forloop.parentloop.parentloop.parentloop.counter }}.{{ forloop.counter }}
                 </td>
-                <td class="text-left font-bold">{{ row.job_no }}</td>
+                <td class="text-left">{{ row.job_no }}</td>
                 <td class="text-center">{{ row.trans_date|date:"d-M-Y" }}</td>
                 <td class="text-left">{{ row.trans_number|slice:"-8:" }}</td>
-                <td class="text-left font-bold" style="font-size: 6.5pt;">{{ row.product_name|truncatechars:50 }}</td>
+                <td class="text-left" style="font-size: 6.5pt;">{{ row.product_name|truncatechars:50 }}</td>
                 <td class="text-center">{{ row.trans_type }}</td>
                 <td>{{ row.final_farword_wt|floatformat:2 }}</td>
                 <td>{{ row.wastage|floatformat:2 }}</td>
                 <td>{{ row.txt_balance_qty|default:"0.00"|floatformat:2 }}</td>
-                <td class="font-bold">{{ row.meters|floatformat:1|intcomma }}</td>
+                <td>{{ row.meters|floatformat:1|intcomma }}</td>
                 <td>{{ row.speed|floatformat:1 }}</td>
                 <td class="text-center">{{ row.start_time|default:"00:00" }}</td>
                 <td class="text-center">{{ row.end_time|default:"00:00" }}</td>
                 <td>{{ row.mc_trouble_shooting_mint|floatformat:1 }}</td>
                 <td>{{ row.total_production_minute|floatformat:1 }}</td>
                 <td>{{ row.wastage_pct|floatformat:2 }}</td>
-                <td class="font-bold">{{ row.average_speed|floatformat:1 }}</td>
+                <td>{{ row.average_speed|floatformat:1 }}</td>
             </tr>
             {% if row.remarks %}
             <tr class="remarks-row">
@@ -194,36 +194,34 @@
             </tr>
             {% endif %}
             {% endfor %}
-            <tr class="total-row"
-                style="background-color: #eef2ff; border-top: 1.5pt solid #312e81; border-bottom: 1pt solid #312e81; font-weight: bold;">
-                <td colspan="6" class="text-right" style="font-size: 7pt; color: #1e1b4b; padding-top: 5px;">Total
-                    {{date_node.date|date:"d-M-Y" }}</td>
+            <tr class="total-row">
+                <td colspan="6" class="text-right" style="font-size: 7pt; padding-top: 5px;">Total {{date_node.date|date:"d-M-Y" }}</td>
                 <td style="font-size: 6.5pt;">{{ date_node.sum_kg|floatformat:2 }}</td>
                 <td style="font-size: 6.5pt;">{{ date_node.sum_wastage|floatformat:2 }}</td>
                 <td style="font-size: 6.5pt;">{{ date_node.sum_bl|floatformat:2 }}</td>
-                <td style="font-size: 6.5pt; color: #1e1b4b;">{{ date_node.sum_meters|floatformat:0|intcomma }}</td>
+                <td style="font-size: 6.5pt;">{{ date_node.sum_meters|floatformat:0|intcomma }}</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td style="font-size: 6.5pt;">{{ date_node.sum_trouble_shooting|floatformat:1 }}</td>
                 <td style="font-size: 6.5pt;">{{ date_node.sum_minutes|floatformat:1 }}</td>
-                <td style="font-size: 6.5pt; color: #b91c1c;">{{ date_node.wastage_pct|floatformat:2 }}</td>
-                <td style="font-size: 7pt; color: #312e81;">{{ date_node.avg_speed|floatformat:1 }}</td>
+                <td style="font-size: 6.5pt;">{{ date_node.wastage_pct|floatformat:2 }}</td>
+                <td style="font-size: 7pt;">{{ date_node.avg_speed|floatformat:1 }}</td>
             </tr>
             {% endfor %}
-            <tr class="total-row" style="background-color: #eee;">
+            <tr class="total-row">
                 <td colspan="6" class="text-right">Total {{ machine.name }}</td>
                 <td>{{ machine.total_kg|floatformat:2 }}</td>
                 <td>{{ machine.total_wastage|floatformat:2 }}</td>
                 <td>{{ machine.total_bl|floatformat:2 }}</td>
-                <td class="font-bold">{{ machine.total_meters|floatformat:0|intcomma }}</td>
+                <td>{{ machine.total_meters|floatformat:0|intcomma }}</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>{{ machine.total_minutes|floatformat:1 }}</td>
                 <td>{{ machine.wastage_pct|floatformat:2 }}</td>
-                <td class="font-bold">{{ machine.avg_speed|floatformat:1 }}</td>
+                <td>{{ machine.avg_speed|floatformat:1 }}</td>
             </tr>
         </tbody>
     </table>
@@ -231,7 +229,7 @@
     <br>
     <div style="text-align: right;">
         <table style="width: 50%; border: 0.5pt solid #000;" align="right">
-            <tr class="total-row" style="background-color: #f1f5f9;">
+            <tr class="total-row">
                 <td class="text-center" style="padding: 2px;">SUMMARY: {{ process.name|upper }}</td>
                 <td style="padding: 2px;">Qty: {{ process.total_kg|floatformat:2 }} kg</td>
                 <td style="padding: 2px;">Meters: {{ process.total_meters|floatformat:0|intcomma }} m</td>

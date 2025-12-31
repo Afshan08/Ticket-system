@@ -45,7 +45,7 @@
                 <select name="report_type"
                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
                     {% for val, label in form.fields.report_type.choices %}
-                    <option value="{{ val }}" {% if form.report_type.value==val %}selected{% endif %}>{{ label }}
+                    <option value="{{ val }}" {% if form.report_type.value == val %}selected{% endif %}>{{ label }}
                     </option>
                     {% endfor %}
                 </select>
@@ -66,8 +66,7 @@
                     class="flex items-center gap-2 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl cursor-pointer hover:bg-indigo-50 hover:border-indigo-200 transition-all group">
                     {{ checkbox.tag }}
                     <span
-                        class="text-sm font-semibold text-gray-600 group-hover:text-indigo-600">{{checkbox.choice_label
-                        }}</span>
+                        class="text-sm font-semibold text-gray-600 group-hover:text-indigo-600">{{checkbox.choice_label}}</span>
                 </label>
                 {% endfor %}
             </div>
