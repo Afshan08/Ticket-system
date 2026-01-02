@@ -29,14 +29,16 @@
             <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">Start Date</label>
                 <div class="relative">
-                    <input type="date" name="start_date" value="{{ form.start_date.value|date:'Y-m-d' }}"
+                    <input type="date" name="start_date"
+                        value="{{ form.start_date.value|date:'Y-m-d'|default:form.start_date.value|default:'' }}"
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
                 </div>
             </div>
             <div>
                 <label class="block text-xs font-bold text-gray-400 uppercase mb-2 tracking-widest">End Date</label>
                 <div class="relative">
-                    <input type="date" name="end_date" value="{{ form.end_date.value|date:'Y-m-d' }}"
+                    <input type="date" name="end_date"
+                        value="{{ form.end_date.value|date:'Y-m-d'|default:form.end_date.value|default:'' }}"
                         class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
                 </div>
             </div>
@@ -45,8 +47,7 @@
                 <select name="report_type"
                     class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all">
                     {% for val, label in form.fields.report_type.choices %}
-                    <option value="{{ val }}" {% if form.report_type.value == val %}selected{% endif %}>{{ label }}
-                    </option>
+                    <option value="{{ val }}" {% if form.report_type.value|stringformat:"s" == val|stringformat:"s" %}selected{% endif %}>{{ label }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -109,13 +110,13 @@
     <div class="bg-indigo-900 text-white p-4 rounded-t-2xl flex items-center justify-between shadow-lg">
         <h2 class="text-xl font-black uppercase tracking-widest">{{ process.name }} PRODUCTION</h2>
         <div class="flex gap-6 text-xs font-mono">
-            <div class="flex flex-col"><span class="text-indigo-300">Total Qty</span><span class="text-lg font-bold">{{
-                    process.total_kg|floatformat:1 }} kg</span></div>
+            <div class="flex flex-col"><span class="text-indigo-300">Total Qty</span><span
+                    class="text-lg font-bold">{{process.total_kg|floatformat:1 }} kg</span></div>
             <div class="flex flex-col"><span class="text-indigo-300">Total Meters</span><span
                     class="text-lg font-bold">{{ process.total_meters|floatformat:0 }} m</span></div>
             <div class="flex flex-col border-l border-indigo-700 pl-6"><span class="text-indigo-300">Wastage
-                    %</span><span class="text-lg font-bold text-amber-400">{{
-                    process.wastage_pct|floatformat:1}}%</span></div>
+                    %</span><span class="text-lg font-bold text-amber-400">
+                    {{process.wastage_pct|floatformat:1}}%</span></div>
         </div>
     </div>
 
@@ -156,8 +157,8 @@
                         </td>
                         <td class="px-6 py-3 text-right text-red-500">{{ row.wastage|default:0|floatformat:1 }}</td>
                         <td class="px-6 py-3 text-right">{{ row.total_production_minute|default:0|floatformat:0 }}</td>
-                        <td class="px-6 py-3 text-right font-bold text-indigo-600">{{
-                            row.average_speed|default:0|floatformat:0 }}</td>
+                        <td class="px-6 py-3 text-right font-bold text-indigo-600">
+                            {{row.average_speed|default:0|floatformat:0 }}</td>
                         <td class="px-6 py-3 text-gray-500 italic">{{ row.machine_operator }}</td>
                     </tr>
                     {% endfor %}
